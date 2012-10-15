@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <fieldset name="transifex" label="COM_CTRANSIFEX_CONFIG_FIELDSET_TRANSIFEX_LABEL" description="COM_CTRANSIFEX_CONFIG_FIELDSET_TRANSIFEX_DESC">
+        <field name="username" type="text" label="COM_CTRANSIFEX_CONFIG_FIELD_TRANSIFEX_USERNAME_LABEL"
+                description="COM_CTRANSIFEX_CONFIG_FIELD_TRANSIFEX_USERNAME_DESC" />
+        <field name="password" type="password"  label="COM_CTRANSIFEX_CONFIG_TRANSIFEX_PASSWORD_LABEL"
+                description="COM_CTRANSIFEX_CONFIG_TRANSIFEX_PASSWORD_DESCRIPTION" />
+    </fieldset>
+
+    <fieldset name="installxml" description="COM_CTRANSIFEX_CONFIG_FIELDSET_INSTALLXML_DESC" label="COM_CTRANSIFEX_CONFIG_FIELDSET_INSTALLXML_LABEL">
+        <field name="author" type="text" label="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_LABEL" description="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_DESC" default="compojoom"/>
+        <field name="author_email" type="text" label="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_EMAIL_LABEL" description="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_EMAIL_DESC" default="yoursite@yoursite.com"/>
+        <field name="author_url" type="text" label="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_URL_LABEL" description="COM_CTRANSIFEX_CONFIG_FIELD_AUTHOR_URL_DESC" default="https://compojoom.com"/>
+        <field name="copyright" type="text" label="COM_CTRANSIFEX_CONFIG_FIELD_COPYRIGHT_LABEL" description="COM_CTRANSIFEX_CONFIG_FIELD_COPYRIGHT_LABEL_DESC" default="© 2008-@@YEAR@@ - compojoom-com. All rights reserved!"/>
+    </fieldset>
+</config>

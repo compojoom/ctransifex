@@ -1,0 +1,13 @@
+build.version=dev
+component.name=ctransifex
+component.upperName=CTRANSIFEX
+plugins=
+pluginscb=
+modules_admin=
+; FTP Options
+ftp.host=ftp.example.com
+ftp.port=21
+ftp.username=username
+ftp.password=password
+ftp.dir=/path/to/directory
+ftp.mode=binary

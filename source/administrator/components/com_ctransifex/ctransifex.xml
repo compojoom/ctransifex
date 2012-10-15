@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension method="upgrade" type="component" version="2.5.0">
+	<name>COM_CTRANSIFEX</name>
+	<author>Compojoom.com</author>
+	<creationDate>@@DATE@@</creationDate>
+	<copyright>(C) 2010 Daniel Dimitrov</copyright>
+	<authorEmail>services@compojoom.com</authorEmail>
+	<authorUrl>www.compojoom.com</authorUrl>
+	<version>@@VERSION@@</version>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<description><![CDATA[CTransifex is a Joomla! extension that uses the transifex API to show the available language packages on your site]]>
+	</description>
+    <scriptfile>script.php</scriptfile>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
+		</sql>
+	</install>
+	<files folder="components/com_@@COMPONENTNAME@@">
+        ##FRONTENDCOMPONENTPACKAGEFILES##
+	</files>
+	<languages folder="language">
+        ##FRONTENDLANGUAGEFILES##
+	</languages>
+	<administration>
+		<menu>COM_@@COMPONENTNAMEUPPERCASE@@</menu>
+		<submenu>
+			<menu view="projects">COM_CTRANSIFEX_PROJECTS</menu>
+			<menu view="liveupdate">COM_CTRANSIFEX_LIVEUPDATE</menu>
+		</submenu>
+		<files folder="administrator/components/com_@@COMPONENTNAME@@">
+            ##ADMINCOMPONENTPACKAGEFILES##
+		</files>
+		<languages folder="administrator/language">
+            ##ADMINLANGUAGEFILES##
+        </languages>
+	</administration>
+	<media destination="com_@@COMPONENTNAME@@" folder="media/com_@@COMPONENTNAME@@">
+        ##MEDIAPACKAGEFILES##
+	</media>
+</extension>
