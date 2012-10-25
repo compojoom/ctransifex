@@ -11,27 +11,29 @@ defined('_JEXEC') or die('Restricted access');
 
 $document = JFactory::getDocument();
 $user		= JFactory::getUser();
+$config = JComponentHelper::getParams('com_ctransifex');
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 
-JHtml::_('behavior.framework');
+JHtml::_('behavior.framework', true);
+Jhtml::_('stylesheet', 'media/com_ctransifex/css/ctransifex-backend.css');
 Jhtml::_('script', 'media/com_ctransifex/js/projects.js');
 
 $domready = "window.addEvent('domready', function() {
-    new projects({token: '".JSession::getFormToken()."'});
+    new projects({token: '".JSession::getFormToken()."', baseUrl:'".Juri::root()."'});
 });";
 
 $document->addScriptDeclaration($domready);
 ?>
 
-<form action="<?php echo JText::_('index.php?option=com_ctransifex&view=projects'); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_ctransifex&view=projects'); ?>"
       id="adminForm"
       name="adminForm"
         method="POST">
-    <table class="table table-striped">
+    <table class="table table-striped adminlist">
         <thead>
             <tr>
-                <th>
+                <th width="2%">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
                 </th>
                 <th>
@@ -42,6 +44,9 @@ $document->addScriptDeclaration($domready);
                 </th>
                 <th>
                     <?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ACCESS', 'a.access', $listDirn, $listOrder); ?>
+                </th>
+                <th>
+                    <?php echo JText::_('COM_CTRANSIFEX_TRANSIFEX_WEBHOOKS'); ?>
                 </th>
             </tr>
         </thead>
@@ -56,12 +61,14 @@ $document->addScriptDeclaration($domready);
                 </td>
                 <td>
                     <?php echo JHtml::_('jgrid.published', $item->state, $i, 'projects.', $canChange, 'cb'); ?>
-                    <a href="#" class="btn ctransifex-project-data"
-                       data-id="<?php echo $item->id; ?>"
-                       title="<?php echo JText::_('COM_CTRANSIFEX_LOAD_TRANSIFEX_PROJECT_DATA'); ?>"
-                       data-toggle="ctransifex">
-                        <i class="icon-loop"></i>
-                    </a>
+                    <?php if($config->get('tx_username') && $config->get('tx_password')) : ?>
+                        <a href="#" class="btn ctransifex-project-data"
+                           data-id="<?php echo $item->id; ?>"
+                           title="<?php echo JText::_('COM_CTRANSIFEX_LOAD_TRANSIFEX_PROJECT_DATA'); ?>"
+                           data-toggle="ctransifex">
+                            <i class="icon-loop icon-joomla25"></i>
+                        </a>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <a href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=project.edit&id=' . $item->id);?>" title="<?php echo JText::_('JACTION_EDIT');?>">
@@ -70,6 +77,13 @@ $document->addScriptDeclaration($domready);
                 </td>
                 <td class="small hidden-phone">
                     <?php echo $this->escape($item->access_level); ?>
+                </td>
+                <td>
+                    <?php if($config->get('transifex_webhook_key')) : ?>
+                        <?php echo JURI::root(); ?>index.php?option=com_ctransifex&key=<?php echo $config->get('transifex_webhook_key'); ?>&task=webhooks.webhook&project_id=<?php echo $item->id; ?>
+                    <?php else : ?>
+                        <?php echo JText::_('COM_CTRANSIFEX_NO_GLOBAL_WEBHOOKS_KEY'); ?>
+                    <?php endif; ?>
                 </td>
 
             </tr>

@@ -16,15 +16,6 @@ class ctransifexViewProjects extends JViewLegacy {
         $this->pagination	= $this->get('Pagination');
         $this->state		= $this->get('State');
 
-        $this->addToolbar();
         parent::display();
-    }
-
-    private function addToolbar(){
-        JToolBarHelper::title(JText::_('COM_CTRANSIFEX_PROJECTS'), 'projects');
-        JToolBarHelper::addNew('project.add');
-        JToolBarHelper::editList('project.edit');
-        JToolBarHelper::deleteList('project.delete');
-        JToolbarHelper::preferences('com_ctransifex');
     }
 }

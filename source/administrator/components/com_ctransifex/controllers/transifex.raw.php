@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+jimport('joomla.filesystem.folder');
 
 class ctransifexControllerTransifex extends JControllerLegacy {
 
@@ -25,13 +26,26 @@ class ctransifexControllerTransifex extends JControllerLegacy {
 
         $project = $this->project;
 
-        $resources = json_decode(ctransifexHelperTransifex::getData($project->transifex_slug.'/resources/'));
+        $resources = ctransifexHelperTransifex::getData($project->transifex_slug.'/resources/');
 
-        foreach($resources as $resource) {
-            $response['data'][] = $resource->slug;
+        if(isset($resources['info']) && $resources['info']['http_code'] != 200) {
+            $response['message'] = $resources['data'];
+            $response['status'] = 'failure';
+
+        } else {
+            $resources = json_decode($resources['data']);
+            foreach($resources as $resource) {
+                $response['data'][] = $resource->slug;
+            }
+            // if we have resources add them to the db
+            if(is_array($response['data'])) {
+                $model = $this->getModel('Resource', 'ctransifexModel', array('project_id' => $project->id));
+
+                $model->add($response['data']);
+            }
+
+            $response['status'] = 'success';
         }
-
-        $response['status'] = 'success';
 
         echo json_encode($response);
         jexit();
@@ -48,28 +62,71 @@ class ctransifexControllerTransifex extends JControllerLegacy {
         $project = $this->project;
 
         $path = $project->transifex_slug.'/resource/'.$resource.'/stats/';
+        $txData =  (ctransifexHelperTransifex::getData($path));
 
-        $stats = get_object_vars(json_decode(ctransifexHelperTransifex::getData($path)));
+        if(isset($txData['info']) && $txData['info']['http_code'] == 200) {
+            $stats = get_object_vars(json_decode($txData['data']));
+            if(is_array($stats)) {
+                $response['status'] = 'success';
+                $response['data'] = array_keys($stats);
 
-        if(is_array($stats)) {
-            $response['status'] = 'success';
-            $response['data'] = array_keys($stats);
+                $model = $this->getModel('language', 'ctransifexModel', array('project' => $project, 'resource' => $resource));
+
+                $model->add($stats);
+            }
+        } else {
+            $response['status'] = 'failure';
+            $response['data'] = $txData['data'];
         }
 
         echo json_encode($response);
         jexit();
     }
 
-    /**
-     * Get the language files from transifex
-     */
-    public function languageFiles() {
+    public function langpack() {
         $this->checkSession();
 
         $input = JFactory::getApplication()->input;
-        $resource = $input->getString('resource');
         $project = $this->project;
+
         $lang = $input->getString('language');
+        $jLang = ctransifexHelperTransifex::getJLangCode($lang, parse_ini_string($this->project->transifex_config, true));
+
+        if($jLang) {
+            $model = $this->getModel('Language', 'ctransifexModel', array('project' => $project));
+            $resources = $model->getResourcesForLang($jLang);
+
+            foreach($resources as $resource) {
+                if(!$this->langFile($resource->resource_name, $lang)) {
+                    JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
+                    JLog::add('something went wrong when we tried to get the ' . $lang . ' for the ' . $resource->resource_name . ' resource');
+                }
+            }
+
+            if(ctransifexHelperPackage::package($jLang, $project)) {
+                $packageModel = $this->getModel('Package', 'ctransifexModel', array('project' => $project));
+                $packageModel->add($resources, $jLang);
+                $response['message'] = 'We have created a zip package for ' . $jLang;
+                $response['status'] = 'success';
+            } else {
+                JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
+                JLog::add('we couldn\t package ' . $lang );
+            }
+
+            echo json_encode($response);
+        }
+
+
+        jexit();
+    }
+
+    /**
+     * Get the language files from transifex
+     */
+    public function langFile($resource, $lang) {
+        $this->checkSession();
+
+        $project = $this->project;
 
         $config = parse_ini_string($project->transifex_config, true);
 
@@ -77,42 +134,14 @@ class ctransifexControllerTransifex extends JControllerLegacy {
 
         $file = ctransifexHelperTransifex::getData($path);
 
-        if($file) {
+        if(isset($file['info']) && $file['info']['http_code'] == 200) {
             if(isset($config[$project->transifex_slug.'.'.$resource])) {
-                // get the languageMap from the config and determine the joomla language code
-                $langMap = explode(',', $config['main']['lang_map']);
-                foreach($langMap as $map) {
-                    $langCodes = explode(':', $map);
-                    $langs[trim($langCodes[0])] = trim($langCodes[1]);
-                }
-                $jlang = $langs[$lang];
-
-                // find out the fileName and his location
-                $fileFilter = preg_split('#/|\\\#', $config[$project->transifex_slug.'.'.$resource]['file_filter']);
-                $fileName = str_replace('<lang>', $jlang, end($fileFilter));
-
-                $adminPath = JPATH_ROOT . '/media/com_ctransifex/packages/compojoom-hotspots/'.$jlang.'/admin/';
-                $frontendPath = JPATH_ROOT . '/media/com_ctransifex/packages/compojoom-hotspots/'.$jlang.'/frontend/';
-
-                if(in_array('admin', $fileFilter) || in_array('administrator', $fileFilter) || in_array('backup', $fileFilter)) {
-                    $path = $adminPath.$fileName;
-                } else {
-                    $path = $frontendPath.$fileName;
-                }
-
-                if(Jfile::write($path, $file)){
-                    $response['status'] = 'success';
-                }
-
-            } else {
-                $response['status'] = 'failure';
-                $response['message'] = 'Your transifex config is missing information for this resource. We cannot save the file';
-
+                $jlang = ctransifexHelperTransifex::getJLangCode($lang, $config);
+                return ctransifexHelperPackage::saveLangFile($file, $jlang, $project,$resource, $config);
             }
         }
 
-        echo json_encode($response);
-        jexit();
+        return false;
     }
 
     /**

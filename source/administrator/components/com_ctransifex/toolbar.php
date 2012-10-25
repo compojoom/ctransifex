@@ -16,7 +16,7 @@ $view	= JFactory::getApplication()->input->getCmd('view');
 
 $subMenus = array (
     'projects' => 'COM_CTRANSIFEX_PROJECTS',
-    'liveupdate' => 'COM_HOTSPOTS_LIVEUPDATE'
+    'liveupdate' => 'COM_CTRANSIFEX_LIVEUPDATE'
 );
 
 foreach($subMenus as $key => $name) {

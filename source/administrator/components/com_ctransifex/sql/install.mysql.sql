@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS `#__ctransifex_languages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL,
+  `resource_id` int(11) NOT NULL,
+  `lang_name` varchar(255) NOT NULL,
+  `completed` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `#__ctransifex_projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -15,5 +24,21 @@ CREATE TABLE IF NOT EXISTS `#__ctransifex_projects` (
   `created` datetime NOT NULL,
   `transifex_config` mediumtext NOT NULL,
   `extension_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ctransifex_resources` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL,
+  `resource_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ctransifex_zips` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL,
+  `lang_name` varchar(255) NOT NULL,
+  `completed` int(11) NOT NULL,
+  `created` date NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;

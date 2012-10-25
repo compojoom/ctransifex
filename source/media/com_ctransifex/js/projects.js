@@ -6,6 +6,27 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+Request.requestQueue = Request.requestQueue || [];
+Request.extend({
+    callQueue:function () {
+        console.log(this.requestQueue.length);
+        this.requestQueue.length && this.requestQueue[0]();
+    },
+    addRequest:function (instance) {
+        var self = this,
+            temp;
+        instance.addEvent('complete:once', function () {
+            this.removeEvent('complete', temp);
+            self.requestQueue.erase(temp);
+            self.callQueue();
+        });
+
+        this.requestQueue.push(temp = function () {
+            instance.send();
+        });
+    }
+});
+
 var projects = new Class({
     Implements:[Options],
     options:{
@@ -42,7 +63,7 @@ var projects = new Class({
                     new Request.JSON({
                         url:form.get('action'),
                         data:data,
-                        onSuccess:function (data) {
+                        onComplete:function (data) {
                             if (data.status == 'success') {
                                 sessionStorage.setItem('resources', JSON.stringify(data.data));
                                 new Element('div', {
@@ -51,9 +72,13 @@ var projects = new Class({
                                 new Element('div', {
                                     html:"We'll now fetch the language stats for those resources"
                                 }).inject(form.getElement('div'));
-                                self.languageStats();
+
+                                setTimeout(function () {
+                                    self.languageStats();
+                                }, 200);
+
                             } else {
-                                form.getElement('div').set('html', data.message);
+                                form.getElement('div').set('html', 'Something went wrong. Transifex replied with: ' + data.message);
                             }
                         }
                     }).send();
@@ -74,89 +99,66 @@ var projects = new Class({
                 'project-id':sessionStorage.getItem('project-id'),
                 'resource':resource
             }
-            new Request.JSON({
-                url: 'index.php?option=com_ctransifex&task=transifex.languageStats&format=raw',
-                data: data,
-                async: false,
-                onSuccess:function (data) {
-                    sessionStorage.setItem(resource, JSON.stringify(data.data));
-                    new Element('div', {
-                        html:"We have found the following languages for the resource " + resource + ':' + data.data.join(', ')
-                    }).inject(self.form.getElement('div'));
+            Request.addRequest(
+                new Request.JSON({
+                    url:'index.php?option=com_ctransifex&task=transifex.languageStats&format=raw',
+                    data:data,
+                    link:'chain',
+                    onComplete:function (data) {
+                        sessionStorage.setItem(resource, JSON.stringify(data.data));
+                        new Element('div', {
+                            html:"We have found the following languages for the resource " + resource + ':' + data.data.join(', ')
+                        }).inject(self.form.getElement('div'));
 
-                    if (resourcesCount == (index + 1)) {
-                        self.getLanguageFiles();
+                        if (resourcesCount == (index + 1)) {
+                            self.getLanguageFiles();
+                        }
                     }
-                }
-            }).send();
+                })
+            )
         });
+
+        Request.callQueue();
     },
 
     getLanguageFiles:function () {
-        var self = this, resources = JSON.parse(sessionStorage.getItem('resources'));
+        var self = this, resources = JSON.parse(sessionStorage.getItem('resources')), availableLangs = [];
 
         resources.each(function (resource, index) {
-            console.log(resource)
-            var langs = JSON.parse(sessionStorage.getItem(resource));
-            langs.each(function(lang, lindex){
-                var data = {
-                    token: self.options.token,
-                    'project-id': sessionStorage.getItem('project-id'),
-                    resource: resource,
-                    language: lang
-                }
-                new Request.JSON({
-                    url: 'index.php?option=com_ctransifex&task=transifex.languageFiles&format=raw',
-                    data: data,
-                    async: false,
-                    onComplete: function(data) {
-                        new Element('div', {
-                            html:lang + ' language file for resource '+ resource +' was downloaded successfully'
-                        }).inject(self.form.getElement('div'));
-//                        console.log();
-                    }
-                }).send();
-
-//                console.log(langs);
-                if(langs.length == (lindex+1)) {
-                    console.log('all language files for ' + resource + ' were downloaded');
-                }
-            });
-
-            if(resources.length == (index+1)) {
-                self.generateLangPacks();
-            }
+            availableLangs.combine(JSON.parse(sessionStorage.getItem(resource)));
         });
-    },
 
-    generateLangPacks: function() {
-        var self = this, resources = JSON.parse(sessionStorage.getItem('resources')), allLangs = [];
-
-        resources.each(function(resource){
-            allLangs.combine(JSON.parse(sessionStorage.getItem(resource)));
-        });
-//        console.log(allLangs);
-        allLangs.each(function(lang){
+        var langsCount = availableLangs.length;
+        (availableLangs.sort()).each(function (language, index) {
             var data = {
-                token: self.options.token,
-                'project-id': sessionStorage.getItem('project-id'),
-                language: lang
+                token:self.options.token,
+                'project-id':sessionStorage.getItem('project-id'),
+                language:language
             }
+            Request.addRequest(
+                new Request.JSON({
+                    url:'index.php?option=com_ctransifex&task=transifex.langpack&format=raw',
+                    data:data,
+                    link:'chain',
+                    onComplete:function (data) {
+                        if (data && data.status == 'success') {
+                            new Element('div', {
+                                html:data.message
+                            }).inject(self.form.getElement('div'));
+                        }
 
-//            console.log(lang);
-            new Request.JSON({
-                url: 'index.php?option=com_ctransifex&task=packager.package&format=raw',
-                data: data,
-                async: false,
-                onComplete: function(data) {
-                    new Element('div', {
-                        html: ' Zip package for '+ lang + 'generated'
-                    }).inject(self.form.getElement('div'));
-                }
-            }).send();
-
+                        if (langsCount == (index + 1)) {
+                            new Element('div', {
+                                html:'We are ready. You can now refresh the page'
+                            }).inject(self.form.getElement('div'));
+                        }
+                    }
+                }));
 
         });
+
+        Request.callQueue();
+        console.log(availableLangs);
     }
 
 });
