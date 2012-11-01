@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>CTransifex - User's Guide</title>
+
+    <author>
+      <firstname>Daniel</firstname>
+
+      <surname>Dimitrov</surname>
+
+      <affiliation>
+        <orgname>compojoom.com</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>31.07.2012</pubdate>
+
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this
+      document under the terms of the GNU Free Documentation License, Version
+      1.3 or any later version published by the Free Software Foundation; with
+      no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A
+      copy of the license is included in the appendix entitled "The GNU Free
+      Documentation License".</para>
+    </legalnotice>
+
+    <abstract>
+      <para>This book covers the use of the CTransifex extension. It does not
+      cover any other extension available on compojoom.com .</para>
+    </abstract>
+  </bookinfo>
+
+  <article>
+    <para><revhistory>
+        <revision>
+          <revnumber>CTransifex - 1.0.0 - Revision 0.1</revnumber>
+
+          <date>29.10.2012</date>
+
+          <author>
+            <firstname>Daniel</firstname>
+
+            <surname>Dimitrov</surname>
+          </author>
+
+          <revremark>1st Draft</revremark>
+        </revision>
+      </revhistory></para>
+  </article>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <section>
+      <title>Introducing CTransifex</title>
+
+      <note>
+        <para>CTransifex is a Joomla extension made for Joomla
+        developers.</para>
+      </note>
+
+      <para>As a Joomla developer you should be no stranger to the problems
+      associated with the distribution of multilingual extensions. In the past
+      our users were sending translations for our extensions through mail or
+      they were uploading them to our forum. It was really a tedious task to
+      keep a track of the latest translations. What do you do when a language
+      file needs to be updated? How do you contact the user who has given you
+      the original translation? </para>
+
+      <para>Thanks to transifex.com this is a problem of the past. If you
+      haven't heard about transifex yet, you should go and check them out!
+      Thanks to their online platform users are able to translate the source
+      language files of your extensions into any language they speak.
+      Everything is done online, you don't have to download zip files to see
+      how much of a file is translated. If you update a source file, then it
+      is immediately visible to your translators that there are strings that
+      need to be updated. </para>
+
+      <para>This tremendously improves the translation process - you don't
+      need to exchange files with your users since everything is done from a
+      central location. </para>
+
+      <para>Last but not least - if you join a translation pool such as
+      opentranslators.org - you'll have a reach to 1000s of translators
+      willing to translate your extensions. </para>
+
+      <para>Opentranslators &amp; transifex greatly improved the quality of
+      the translations of our extension, but suddenly we had a new problem.
+      How to distribute those translations in the most effective way? In the
+      past we were creating a single installation package of our extensions
+      that contained all of the available translations. Now this was fine, but
+      translators are always few days behind... that meant that we had to
+      distribute our extensions with non-complete language files and when a
+      translation is available we had to update the whole package to add it.
+      As you can imagine this is not a very effective process. Since transifex
+      offers a powerful API, we decided that it was time to automate the
+      process. </para>
+
+      <para>Now instead of distributing the extensions with the currently
+      available language translations we distribute them with only the source
+      language (English in our case). If the user needs a French, German or
+      whatever translation - he can come to our website and download a
+      language pack that would contain that translation. The best part of
+      those language packs is that they are automatically generated. Whenever
+      a translator updates a language file on the transifex server, the
+      language pack on our server will be updated as well. Once setup we don't
+      have to do anything to serve those language packs to our users. The
+      added benefit for our users is that they can always see how complete
+      each language pack is, what was the latest update date &amp; if they
+      want they can head up to transifex and translate the remaining strings.
+      </para>
+    </section>
+
+    <section>
+      <title>Features</title>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Works on Joomla 2.5 and 3.0</para>
+          </listitem>
+
+          <listitem>
+            <para>supports transifex API version 2.1</para>
+          </listitem>
+
+          <listitem>
+            <para>automatic generation of language packs with 1 click</para>
+          </listitem>
+
+          <listitem>
+            <para>transifex webhooks support - language packs will be
+            automatically updated with the latest translation files whenever a
+            file gets 100% translated in transifex </para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Installation and updates</title>
+
+    <para>Installing CTransifex is no different than installing any other
+    Joomla!™ extension on your site. You can read the complete instructions
+    for installing Joomla!™ extensions on the <ulink
+    url="http://help.joomla.org/content/view/1476/235/">official help
+    page</ulink> .Throughout this chapter we assume that you are familiar with
+    these instructions and we will not duplicate them.</para>
+
+    <section>
+      <title>Getting the installation packages</title>
+
+      <para>You can download the latest installation packages by visiting our
+      site at <ulink
+      url="https://compojoom.com">https://compojoom.com</ulink>. Go to
+      Download -&gt; CTransifex menu item. The releases are listed in
+      descending order with the newest release always on top. Click on the
+      release number and then download the ZIP package.</para>
+
+      <para>You can use the installation package to update from previous
+      version as well; just install it, without uninstalling the old
+      package.</para>
+    </section>
+
+    <section>
+      <title>Updating to the latest version</title>
+
+      <section>
+        <title>Checking for the latest version and upgrading</title>
+
+        <para>You can easily check for the latest published version of
+        CTransifex by visiting https://compojoom.com and going to
+        Downloads-&gt;CTransifex.</para>
+
+        <para>Updating CTransifex to the latest version is by no means
+        different than installing the component! You do not have to uninstall
+        the previous version; in fact, you are discouraged from doing so.
+        Simply follow the installation instructions so as to install the
+        latest CTransifex version over the existing installation. That's all!
+        All your settings are preserved.</para>
+      </section>
+
+      <section>
+        <title>Live update</title>
+
+        <para>There is also an alternate update path, if your server supports
+        it. It is called the "Live Update" feature (thanks to Nicholas K.
+        Dionysopoulos from http://akeebabackup.com) . Whenever you click on
+        the Live update button in the Navigation toolbar, it will
+        automatically check for the existence of an updated version and it
+        will notify you. Clicking on the update button allows you to perform a
+        live update without further interaction. Do note that if your server
+        is protected by a firewall you'll have to enable port 80 and 443 TCP
+        traffic to https://compojoom.com for this feature to work
+        properly.</para>
+
+        <para/>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Using the CTransifex component</title>
+
+    <para/>
+
+    <section>
+      <title>Setting up your transifex project</title>
+
+      <para>Currenly the only way to achieve automation is to have conventions
+      that you always keep. In this section of the User guide we will present
+      you with our workflow and will give you an example how to setup your
+      development environment. You can of course setup your dev. environment
+      however you see fit, but we cannot garantee that the ctransifex
+      extension will work for you in that case.</para>
+
+      <para>First let us look at our folder structure.</para>
+
+      <graphic fileref="images/structure.PNG"/>
+
+      <para>As you can see from the screenshot above our project structure has
+      a very specific form. First of all - all the files that have anything to
+      do with the extension that will develop will land in the com_ctransifex
+      folder. Then inside that folder we store the transifex config (in the
+      .tx folder). Inside the build folder we have our phing scripts that help
+      us create the zip package of an extension. The docs folder is obviously
+      for documentation and the source folder is actually where we have the
+      extensions code. As you can see from the screenshot the content of the
+      source folder resembles the joomla folder structure. </para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Where to go from here?</title>
+
+    <para>If you encounter any problems or have any suggestions don't hesitate
+    to contact us. We provide top-notch <ulink
+    url="https://compojoom.com/forum/cmc-mailchimp-for-joomla">forum
+    support</ulink>. Just drop us a line!</para>
+  </chapter>
+</book>

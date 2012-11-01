@@ -9,8 +9,11 @@
 Request.requestQueue = Request.requestQueue || [];
 Request.extend({
     callQueue:function () {
-        console.log(this.requestQueue.length);
-        this.requestQueue.length && this.requestQueue[0]();
+        if(this.requestQueue.length) {
+            this.requestQueue[0]();
+        } else {
+            this.onEnd();
+        }
     },
     addRequest:function (instance) {
         var self = this,
@@ -54,11 +57,20 @@ var projects = new Class({
 
                 }
 
+                form.getElements('div div').destroy().empty();
+                $$('.modal .close').addEvent('click', function() {
+                    div.destroy();
+                    modal.hide();
+                    Request.requestQueue.empty();
+                });
+
                 modal.setStyle('display', 'block');
                 var data = {
                     'project-id':sessionStorage.getItem('project-id'),
                     'token':self.options.token
                 }
+
+                modal.getElement('.btn-primary').removeEvents();
                 modal.getElement('.btn-primary').addEvent('click', function () {
                     new Request.JSON({
                         url:form.get('action'),
@@ -73,9 +85,7 @@ var projects = new Class({
                                     html:"We'll now fetch the language stats for those resources"
                                 }).inject(form.getElement('div'));
 
-                                setTimeout(function () {
-                                    self.languageStats();
-                                }, 200);
+                                self.languageStats();
 
                             } else {
                                 form.getElement('div').set('html', 'Something went wrong. Transifex replied with: ' + data.message);
@@ -90,8 +100,7 @@ var projects = new Class({
 
 
     languageStats:function () {
-        var self = this, resources = JSON.parse(sessionStorage.getItem('resources')),
-            resourcesCount = resources.length;
+        var self = this, resources = JSON.parse(sessionStorage.getItem('resources'));
 
         resources.each(function (resource, index) {
             var data = {
@@ -99,6 +108,7 @@ var projects = new Class({
                 'project-id':sessionStorage.getItem('project-id'),
                 'resource':resource
             }
+
             Request.addRequest(
                 new Request.JSON({
                     url:'index.php?option=com_ctransifex&task=transifex.languageStats&format=raw',
@@ -110,26 +120,29 @@ var projects = new Class({
                             html:"We have found the following languages for the resource " + resource + ':' + data.data.join(', ')
                         }).inject(self.form.getElement('div'));
 
-                        if (resourcesCount == (index + 1)) {
-                            self.getLanguageFiles();
-                        }
                     }
                 })
             )
         });
+        Request.onEnd = function() {
+            self.getLanguageFiles();
+        }
 
         Request.callQueue();
     },
 
     getLanguageFiles:function () {
-        var self = this, resources = JSON.parse(sessionStorage.getItem('resources')), availableLangs = [];
+        var self = this, resources = JSON.parse(sessionStorage.getItem('resources')), availableLangs = [], langs = [];
 
         resources.each(function (resource, index) {
             availableLangs.combine(JSON.parse(sessionStorage.getItem(resource)));
         });
 
-        var langsCount = availableLangs.length;
-        (availableLangs.sort()).each(function (language, index) {
+        availableLangs.each(function(alang) {
+           langs.include(alang);
+        });
+
+        (langs.sort()).each(function (language) {
             var data = {
                 token:self.options.token,
                 'project-id':sessionStorage.getItem('project-id'),
@@ -146,19 +159,18 @@ var projects = new Class({
                                 html:data.message
                             }).inject(self.form.getElement('div'));
                         }
-
-                        if (langsCount == (index + 1)) {
-                            new Element('div', {
-                                html:'We are ready. You can now refresh the page'
-                            }).inject(self.form.getElement('div'));
-                        }
                     }
                 }));
 
         });
 
+        Request.onEnd = function() {
+            new Element('div', {
+                html:'We are ready. You can now refresh the page'
+            }).inject(self.form.getElement('div'));
+        }
+
         Request.callQueue();
-        console.log(availableLangs);
     }
 
 });

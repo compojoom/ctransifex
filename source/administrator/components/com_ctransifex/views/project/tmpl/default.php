@@ -10,6 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.tooltip');
 JHtml::_('behavior.keepalive');
 
 ?>
@@ -69,10 +70,14 @@ JHtml::_('behavior.keepalive');
                         </div>
                     </div>
                 </div>
+                <div class="clr"></div>
                 <?php echo $this->form->getLabel('description'); ?>
+                <div class="clr"></div>
                 <?php echo $this->form->getInput('description'); ?>
 
+                <div class="clr"></div>
                 <?php echo $this->form->getLabel('transifex_config'); ?>
+                <div class="clr"></div>
                 <?php echo $this->form->getInput('transifex_config'); ?>
             </fieldset>
         </div>

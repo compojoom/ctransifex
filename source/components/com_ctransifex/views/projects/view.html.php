@@ -15,6 +15,8 @@ class ctransifexViewProjects extends JViewLegacy {
         $this->items		= $this->get('Items');
         $this->pagination	= $this->get('Pagination');
         $this->state		= $this->get('State');
+        $document           = JFactory::getDocument();
+        $document->setTitle($document->getTitle() .' '. JText::_('COM_CTRANSIFEX_TRANSLATION_PROJECTS'));
 
         parent::display();
     }

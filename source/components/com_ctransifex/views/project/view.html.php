@@ -14,7 +14,8 @@ class ctransifexViewProject extends JViewLegacy {
     public function display() {
         $this->item = $this->get('Item');
         $this->languages = $this->get('Languages');
-
+        $document = JFactory::getDocument();
+        $document->setTitle($document->getTitle() . ' ' . JText::sprintf('COM_CTRANSIFEX_TRANSLATIONS_FOR_PROJECT',$this->item->title));
         parent::display();
     }
 }

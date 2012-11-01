@@ -23,6 +23,7 @@ JLoader::discover('ctransifexHelper', JPATH_COMPONENT . '/helpers');
 
 $input = JFactory::getApplication()->input;
 if($input->getCmd('view','') == 'liveupdate') {
+    require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';
     JToolBarHelper::preferences( 'com_hotspots' );
     LiveUpdate::handleRequest();
     return;

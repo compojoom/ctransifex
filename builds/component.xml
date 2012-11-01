@@ -74,7 +74,7 @@
 
         <copy todir="${destination.dir}/administrator/language/">
             <fileset dir="${dirs.source}/administrator/language/">
-                <include name="**/*.${component.name}.**"/>
+                <include name="**/*.com_${component.name}.**"/>
             </fileset>
         </copy>
 
@@ -85,7 +85,7 @@
 
         <copy todir="${destination.dir}/language/">
             <fileset dir="${dirs.source}/language/">
-                <include name="**/*.${component.name}.ini"/>
+                <include name="**/*.com_${component.name}.ini"/>
             </fileset>
         </copy>
 
@@ -95,7 +95,7 @@
                 <copy todir="${destination.dir}/media/com_${component.name}">
                     <fileset dir="${dirs.source}/media/com_${component.name}">
                         <include name="**/*.*"/>
-                        <exclude name="packages/*.*"/>
+                        <exclude name="packages/**/*.*"/>
                     </fileset>
                 </copy>
                 <mkdir dir="${destination.dir}/media/com_${component.name}/packages"/>

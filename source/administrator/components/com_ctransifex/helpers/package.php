@@ -18,10 +18,10 @@ class ctransifexHelperPackage
         $fileFilter = preg_split('#/|\\\#', $config[$project->transifex_slug.'.'.$resource]['file_filter']);
         $fileName = str_replace('<lang>', $jLang, end($fileFilter));
 
-        $adminPath = JPATH_ROOT . '/media/com_ctransifex/packages/compojoom-hotspots/'.$jLang.'/admin/';
-        $frontendPath = JPATH_ROOT . '/media/com_ctransifex/packages/compojoom-hotspots/'.$jLang.'/frontend/';
+        $adminPath = JPATH_ROOT . '/media/com_ctransifex/packages/'.$project->transifex_slug.'/'.$jLang.'/admin/';
+        $frontendPath = JPATH_ROOT . '/media/com_ctransifex/packages/'.$project->transifex_slug.'/'.$jLang.'/frontend/';
 
-        if(in_array('admin', $fileFilter) || in_array('administrator', $fileFilter) || in_array('backup', $fileFilter)) {
+        if(in_array('admin', $fileFilter) || in_array('administrator', $fileFilter) || in_array('backend', $fileFilter)) {
             $path = $adminPath.$fileName;
         } else {
             $path = $frontendPath.$fileName;
@@ -111,7 +111,13 @@ class ctransifexHelperPackage
      */
     private function generateInstallXml($folder, $jLang, $project)
     {
-        $dummyXml = JFile::read(JPATH_ROOT . '/media/com_ctransifex/packages/install.xml');
+        $mediaXML = JPATH_ROOT . '/media/com_ctransifex/packages/install.xml';
+        if(file_exists($mediaXML)) {
+            $dummyXml = JFile::read($mediaXML);
+        } else {
+            $dummyXml = JFile::read(JPATH_COMPONENT_ADMINISTRATOR.'/assets/install.xml');
+        }
+
         $params = JComponentHelper::getParams('com_ctransifex');
         $adminFiles = '';
         $frontendFiles = '';
@@ -145,6 +151,7 @@ class ctransifexHelperPackage
      * @return string
      */
     private static function getFiles($folder) {
+//        var_dump($folder);
         $files = JFolder::files($folder);
         $xml = array();
         foreach($files as $file) {

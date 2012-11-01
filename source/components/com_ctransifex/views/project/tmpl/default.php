@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-
+JHtml::_('stylesheet', 'media/com_ctransifex/css/ctransifex-frontend.css');
 ?>
 
 <h2>

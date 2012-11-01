@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="file" method="upgrade" version="2.5">
+    <name>@@EXTENSION_NAME@@</name>
+    <version>@@VERSION@@</version>
+    <creationDate>@@CREATION_DATE@@</creationDate>
+    <author>@@AUTHOR@@</author>
+    <authorEmail>@@AUTHOR_EMAIL@@</authorEmail>
+    <authorUrl>@@AUTHOR_URL@@</authorUrl>
+    <copyright>@@COPYRIGHT@@</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <packager>CTransifex</packager>
+    <packagerurl>https://compojoom.com</packagerurl>
+    <description>
+        <![CDATA[@@DESCRIPTION@@
+        @@THANKS_OPENTRANSLATORS@@]]>
+    </description>
+    <fileset>
+        @@ADMIN_FILENAMES@@
+        @@FRONTEND_FILENAMES@@
+    </fileset>
+</extension>

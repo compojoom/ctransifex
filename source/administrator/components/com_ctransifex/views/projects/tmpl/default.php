@@ -112,7 +112,7 @@ $document->addScriptDeclaration($domready);
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo JText::_('COM_CTRANSIFEX_CLOSE'); ?></button>
+<!--        <button class="btn" data-dismiss="modal" aria-hidden="true">--><?php //echo JText::_('COM_CTRANSIFEX_CLOSE'); ?><!--</button>-->
         <button class="btn btn-primary"><?php echo JText::_('COM_CTRANSIFEX_GET_DATA'); ?></button>
     </div>
 </div>
