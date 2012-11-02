@@ -208,27 +208,27 @@
     <section>
       <title>Setting up your transifex project</title>
 
-      <para>Currenly the only way to achieve automation is to have conventions
-      that you always keep. In this section of the User guide we will present
-      you with our workflow and will give you an example how to setup your
-      development environment. You can of course setup your dev. environment
-      however you see fit, but we cannot garantee that the ctransifex
-      extension will work for you in that case.</para>
+      <para>Currently the only way to achieve automation is to have
+      conventions that you always keep. In this section of the User guide we
+      will present you with our work flow and will give you an example how to
+      setup your development environment. You can of course setup your
+      development environment however you see fit, but we cannot guarantee
+      that the CTransifex extension will work for you in that case.</para>
 
       <para>First let us look at our folder structure.</para>
 
       <graphic fileref="images/structure.PNG"/>
 
-      <para>As you can see from the screenshot above our project structure has
-      a very specific form. First of all - all the files that have anything to
-      do with the extension that we develop will land in the com_ctransifex
-      folder. Then inside that folder we store the transifex config (in the
-      .tx folder). Inside the build folder we have our phing scripts that help
-      us create the zip package of an extension. The docs folder is obviously
-      for documentation and the source folder is actually where we have the
-      extensions code. As you can see from the screenshot the content of the
-      source folder resembles the joomla folder structure. The language files
-      are located in:</para>
+      <para>As you can see from the screen shot above our project structure
+      has a very specific form. First of all - all the files that have
+      anything to do with the extension that we develop will land in the
+      com_ctransifex folder. Then inside that folder we store the transifex
+      config (in the .tx folder). Inside the build folder we have our phing
+      scripts that help us create the zip package of an extension. The docs
+      folder is obviously for documentation and the source folder is actually
+      where we have the extensions code. As you can see from the screen shot
+      the content of the source folder resembles the Joomla folder structure.
+      The language files are located in:</para>
 
       <programlisting>administrator/language/&lt;lang&gt;/&lt;lang&gt;.com_componentname.ini
 language/&lt;lang&gt;/&lt;lang&gt;.com_componentname.ini</programlisting>
@@ -238,7 +238,7 @@ language/&lt;lang&gt;/&lt;lang&gt;.com_componentname.ini</programlisting>
       project structure let us create the project on transifex.com .</para>
 
       <para>Go to transifex.com and login into your account. On the dashboard
-      click on "Add new project". </para>
+      click on "Add new project".</para>
 
       <graphic fileref="images/transifex-dashboard.PNG"/>
 
@@ -261,13 +261,12 @@ language/&lt;lang&gt;/&lt;lang&gt;.com_componentname.ini</programlisting>
       your extension directory.</para>
 
       <note>
-        <para>In our example the extension directory is com_ctransifex.
-        </para>
+        <para>In our example the extension directory is com_ctransifex.</para>
       </note>
 
       <note>
         <para>We are developing on windows - that is why we will be directly
-        calling the tx.exe in the console. If you are on linux or mac (you
+        calling the tx.exe in the console. If you are on Linux or mac (you
         would generally need to just type <emphasis role="bold">tx</emphasis>
         in the console)</para>
       </note>
@@ -277,9 +276,9 @@ language/&lt;lang&gt;/&lt;lang&gt;.com_componentname.ini</programlisting>
       <programlisting>tx.exe init</programlisting>
 
       <para>The init command will create the .tx folder for you and it will
-      place a .config file in it. Now for joomla development we will need to
+      place a .config file in it. Now for Joomla development we will need to
       make modifications to the .config file. Open the .config file with your
-      prefered editor and at the begining of the file write:</para>
+      preferred editor and at the beginning of the file write:</para>
 
       <programlisting>[main]
 host = https:://www.transifex.net
@@ -287,11 +286,11 @@ lang_map = ar: ar-AA, af_ZA: af-ZA, am_ET: am-ET, ar_AE: ar-AE, ar_BH: ar-BH, ar
 type = INI
 </programlisting>
 
-      <para>The lang_map line maps the transifex language format to the joomla
-      one. </para>
+      <para>The lang_map line maps the transifex language format to the Joomla
+      one.</para>
 
-      <para>The type line tells transifex that we are dealing with ini files.
-      </para>
+      <para>The type line tells transifex that we are dealing with ini
+      files.</para>
 
       <para>Now we need to define some resources:</para>
 
@@ -306,12 +305,12 @@ source_lang = en_GB</programlisting>
 
       <para>file_filter defines a pattern for our language files. In this case
       -&gt; each new language file will be saved at the location defined here.
-      &lt;lang&gt; will be replaced with en-GB, de-DE etc. </para>
+      &lt;lang&gt; will be replaced with en-GB, de-DE etc.</para>
 
       <para>source_file defines the language source file</para>
 
       <para>source_lang determines that the source file is in en_GB
-      (english).</para>
+      (English).</para>
 
       <para>As you can see from the code this is our backend (administrator)
       language file for that extension. For the frontend it will look like
@@ -349,7 +348,7 @@ source_lang = en_GB
       <para>Each resource will be pushed to transifex. If it is not existing
       it will be created. Once you are ready -&gt; you'll see that you have
       new resources in transifex and basically your project is ready to be
-      translated. </para>
+      translated.</para>
     </section>
   </chapter>
 
@@ -357,7 +356,7 @@ source_lang = en_GB
     <title>Using the CTransifex extension</title>
 
     <para>In this chapter we will go through the basics of setting up the
-    ctransifex extension. </para>
+    CTransifex extension.</para>
 
     <section>
       <title>Options</title>
@@ -372,8 +371,8 @@ source_lang = en_GB
       transifex.</para>
 
       <para>The lang map is used to match the transifex languages to the
-      joomla language. We provide a pretty good default mapping, but if you
-      find that we've missed something just add it to this field. </para>
+      Joomla language. We provide a pretty good default mapping, but if you
+      find that we've missed something just add it to this field.</para>
 
       <note>
         <para>We merge the content of this field with the value of lang_map in
@@ -381,21 +380,21 @@ source_lang = en_GB
       </note>
 
       <para>Each language package needs an install.xml file in order for
-      joomla to be able to install the language on the site. We create that
+      Joomla to be able to install the language on the site. We create that
       file automatically &amp; in the install.xml file you are able to set
       some of the values for this file like - author, author email, author_url
-      &amp; copyright. </para>
+      &amp; copyright.</para>
     </section>
 
     <section>
       <title>Creating new project</title>
 
-      <para>To craete a new project make sure that you are logged in the
-      Joomla backend and then go to -&gt; components -&gt; ctransifex -&gt;
+      <para>To create a new project make sure that you are logged in the
+      Joomla backend and then go to -&gt; components -&gt; CTransifex -&gt;
       projects. Click on the "new" button. On the new screen you will see a
       form. When you hover with the mouse over a field label you should get a
-      tooltip explaining what this field is for. The fields that are maybe new
-      to you are:</para>
+      tool tip explaining what this field is for. The fields that are maybe
+      new to you are:</para>
 
       <itemizedlist>
         <listitem>
@@ -424,13 +423,13 @@ source_lang = en_GB
         is a backend language file or a frontend language file. Whenever you
         add a new resource to your project in transifex you should update this
         field with resource definition as well. Otherwise we won't be able to
-        fetch the file and add it to the language pack. </para>
+        fetch the file and add it to the language pack.</para>
 
         <para>We determine if a file is a backend or frontend language by
         searching for the words "admin", "administrator" or "backend" in the
         file_filter for each resource. If we find that word we will place this
         file in the admin folder. If the file_filter doesn't contain any of
-        those words then it will be treated as a frontend file. </para>
+        those words then it will be treated as a frontend file.</para>
       </important>
     </section>
 
@@ -441,15 +440,15 @@ source_lang = en_GB
       available translations and create the language packs. To do this on the
       projects screen in the status column you'll see a button with 2 arrows
       -&gt; just press it and a modal window will appear. Click on "Get data"
-      and let the script do its job. </para>
+      and let the script do its job.</para>
 
       <note>
         <para>Taking all resources from transifex.com is a time intensive
         task. Depending on how many resources and languages your project has
-        it can take just 5mins or 30. Don't refresh the page while the script
+        it can take just 5 mins or 30. Don't refresh the page while the script
         is working. If the script is not responding for more than 2mins it
         means that something went wrong. You can contact us for support or try
-        to debug the ajax request and see what's going on.</para>
+        to debug the Ajax request and see what's going on.</para>
       </note>
     </section>
 
@@ -462,20 +461,20 @@ source_lang = en_GB
       with a translation (for example when it is 100% complete). To make use
       of this feature on the projects page in transifex you will see a column
       called webhooks. Copy the URL from there and paste it in your web hook
-      url in transifex.com (project's dashboard -&gt; then manage project
-      -&gt; scroll down to find the field). Once you add the url, transifex
+      URL in transifex.com (project's dashboard -&gt; then manage project
+      -&gt; scroll down to find the field). Once you add the URL, transifex
       will always call it when something changes. Then we will generate the
-      new langauge pack for the specific language. </para>
+      new language pack for the specific language.</para>
 
       <important>
-        <para>Make sure that you've already generated the langauge files
+        <para>Make sure that you've already generated the language files
         before starting to use this feature. (refer to "Generating language
         packs for the first time" section)</para>
       </important>
     </section>
 
     <section>
-      <title>Creatin a menu link</title>
+      <title>Creating a menu link</title>
 
       <para/>
 
@@ -498,7 +497,7 @@ source_lang = en_GB
         login into your Joomla backend, go to menus-&gt; your menu -&gt; click
         on new. Then in "Menu Item type" select CTransifex -&gt; project. In
         the "Project id" field type the id of the project that you want to
-        link to. When ready click on save. </para>
+        link to. When ready click on save.</para>
       </section>
     </section>
   </chapter>

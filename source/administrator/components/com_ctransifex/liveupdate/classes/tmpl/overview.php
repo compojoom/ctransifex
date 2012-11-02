@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die();
 
+JHtml::_('behavior.framework');
+JHtml::_('behavior.modal');
 ?>
 
 <div class="liveupdate">

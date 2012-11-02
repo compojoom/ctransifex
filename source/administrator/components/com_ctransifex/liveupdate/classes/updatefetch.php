@@ -23,9 +23,9 @@ class LiveUpdateFetch extends JObject
 	 * 
 	 * @return int 0 = no updates, 1 = updates available, -1 = updates not supported, -2 = fetching updates crashes the server
 	 */
-	public function hasUpdates()
+	public function hasUpdates($force = false)
 	{
-		$updateInfo = $this->getUpdateInformation();
+		$updateInfo = $this->getUpdateInformation($force);
 		
 		if($updateInfo->stuck) return -2;
 		
