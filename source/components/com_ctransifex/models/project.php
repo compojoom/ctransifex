@@ -22,7 +22,8 @@ class ctransifexModelProject extends JModelAdmin {
         $id = $input->getInt('id', 0);
         $query = $db->getQuery(true);
 
-        $query->select('*')->from('#__ctransifex_zips')->where($db->qn('project_id') . '=' . $db->q($id) );
+        $query->select('*')->from('#__ctransifex_zips')
+			->where($db->qn('project_id') . '=' . $db->q($id) );
 
         $db->setQuery($query);
 
@@ -45,10 +46,17 @@ class ctransifexModelProject extends JModelAdmin {
                     if((isset($iso[1]) && strlen($iso[1]) == 2)) {
                         $languages[$key]->iso_country_name = ctransifexHelperLanguage::code2ToCountry($iso[1]);
                     }
-
+					// prepare values for array_multisort
+					$sort['iso_lang_name'][$key] = $languages[$key]->iso_lang_name;
+					$sort['completed'][$key] = $languages[$key]->completed;
                 }
             }
+
+			// sort first on completed status and then on the real iso_lang_name
+			array_multisort($sort['completed'], SORT_DESC, $sort['iso_lang_name'], SORT_ASC, $languages);
         }
+
+
 
         return $languages;
     }
