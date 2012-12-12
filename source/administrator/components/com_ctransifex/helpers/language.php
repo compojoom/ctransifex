@@ -65,6 +65,7 @@ class ctransifexHelperLanguage
         'danish' => 'da',
         'dutch' => 'nl',
         'english' => 'en',
+		'esperanto' => 'eo',
         'estonian' => 'et',
         'farsi' => 'fa',
         'finnish' => 'fi',
@@ -195,6 +196,7 @@ class ctransifexHelperLanguage
         'de' => 'german',
         'el' => 'greek',
         'en' => 'english',
+		'eo' => 'esperanto',
         'es' => 'spanish',
         'et' => 'estonian',
         'gl' => 'galician',
@@ -313,6 +315,7 @@ class ctransifexHelperLanguage
 
 
     public static $code2ToCountry = array(
+		'aa' => 'Unitag',
         'af' => 'Afghanistan',
         'ax' => 'Åland islands',
         'al' => 'Albania',
@@ -559,6 +562,7 @@ class ctransifexHelperLanguage
         'vi' => 'Virgin islands, u.s.',
         'wf' => 'Wallis and futuna',
         'eh' => 'Western sahara',
+		'xx' => '',
         'ye' => 'Yemen',
         'zm' => 'Zambia',
         'zw' => 'Zimbabwe',

@@ -81,4 +81,23 @@
 
     </fieldset>
 
+    <fields name="params">
+        <fieldset name="jbasic" >
+            <field
+                    name="display_contribute_link"
+                    type="list"
+                    label="COM_CTRANSIFEX_CONTRIBUTE_LINK"
+                    description="COM_CTRANSIFEX_CONTRIBUTE_LINK_DESC"
+                    class="inputbox"
+                    ilter="intval" size="1" default="1"
+                    >
+                <option value="1">
+                    JYES</option>
+                <option value="0">
+                    JNO</option>
+            </field>
+
+        </fieldset>
+    </fields>
+
 </form>

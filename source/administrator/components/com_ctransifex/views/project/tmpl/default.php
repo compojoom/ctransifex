@@ -86,8 +86,22 @@ JHtml::_('behavior.keepalive');
             <?php echo $this->form->getInput('state'); ?>
             <?php echo $this->form->getLabel('access'); ?>
             <?php echo $this->form->getInput('access'); ?>
+
+			<?php
+			$fieldSets = $this->form->getFieldsets('params');
+			foreach ($fieldSets as $name => $fieldSet) : ?>
+
+				<?php foreach ($this->form->getFieldset($name) as $field) : ?>
+					<?php echo $field->label; ?>
+						<?php echo $field->input; ?>
+				<?php endforeach; ?>
+
+			<?php endforeach; ?>
         </div>
-    </div>
+
+
+
+	</div>
 
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>

@@ -20,6 +20,27 @@ class CtransifexTableProject extends JTable
         parent::__construct('#__ctransifex_projects', 'id', $db);
     }
 
+	/**
+	 * Overloaded bind function to pre-process the params.
+	 *
+	 * @param Named $array
+	 * @param string $ignore
+	 * @internal param \Named $array array
+	 * @return    null|string    null is operation was satisfactory, otherwise returns an error
+	 * @see        JTable:bind
+	 * @since    1.5
+	 */
+	public function bind($array, $ignore = '')
+	{
+		if (isset($array['params']) && is_array($array['params'])) {
+			$registry = new JRegistry;
+			$registry->loadArray($array['params']);
+			$array['params'] = (string) $registry;
+		}
+
+		return parent::bind($array, $ignore);
+	}
+
     /**
      * Method to set the publishing state for a row or list of rows in the database
      * table.  The method respects checked out rows by other users and will attempt

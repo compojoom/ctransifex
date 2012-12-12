@@ -42,7 +42,8 @@ class ctransifexModelLanguage extends JModelLegacy
                 $values[] = $db->q($this->projectId) . ','
                     . $db->q($this->resourceId) . ','
                     . $db->q($langCode) . ','
-                    . $db->q($language->completed);
+                    . $db->q($language->completed) . ','
+					. $db->q(json_encode($language));
             }
         }
 
@@ -52,7 +53,8 @@ class ctransifexModelLanguage extends JModelLegacy
                 $db->qn('project_id'),
                 $db->qn('resource_id'),
                 $db->qn('lang_name'),
-                $db->qn('completed')
+                $db->qn('completed'),
+				$db->qn('raw_data')
             )
         )->values($values);
 
@@ -82,7 +84,8 @@ class ctransifexModelLanguage extends JModelLegacy
                 $db->qn('l.resource_id'),
                 $db->qn('r.resource_name'),
                 $db->qn('l.lang_name'),
-                $db->qn('l.completed')
+                $db->qn('l.completed'),
+				$db->qn('l.raw_data')
             )
         )
             ->from('#__ctransifex_languages AS l')
@@ -91,6 +94,6 @@ class ctransifexModelLanguage extends JModelLegacy
             ->where($db->qn('l.project_id') . '=' . $db->q($this->projectId));
 
         $db->setQuery($query);
-        return $db->loadObjectList();;
+        return $db->loadObjectList();
     }
 }

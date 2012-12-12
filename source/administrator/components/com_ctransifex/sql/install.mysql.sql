@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `#__ctransifex_languages` (
   `resource_id` int(11) NOT NULL,
   `lang_name` varchar(255) NOT NULL,
   `completed` int(11) NOT NULL,
+  `raw_data` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `#__ctransifex_projects` (
   `created` datetime NOT NULL,
   `transifex_config` mediumtext NOT NULL,
   `extension_name` varchar(255) NOT NULL,
+  `params` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 
