@@ -58,12 +58,12 @@ class ctransifexInstallerDatabase {
 		$db->setQuery(
 			'ALTER TABLE `#__ctransifex_projects`
 			ADD `params` LONGTEXT NOT NULL;');
-		$db->query();
+		$db->execute();
 
 		$db->setQuery(
 			'ALTER TABLE `#__ctransifex_languages`
 			ADD `raw_data` LONGTEXT NOT NULL;');
-		$db->query();
+		$db->execute();
 	}
 }
 
@@ -118,7 +118,7 @@ class CompojoomInstaller
 							$sql .= ', params = ' . $db->quote($installer->getParams());
 							$sql .= ' WHERE `module`=' . $db->Quote($module);
 							$db->setQuery($sql);
-							$db->query();
+							$db->execute();
 
 //	                        get module id
 							$db->setQuery('SELECT id FROM #__modules WHERE module = ' . $db->quote($module));
@@ -128,7 +128,7 @@ class CompojoomInstaller
 							$query = 'INSERT INTO #__modules_menu(moduleid, menuid) VALUES (' . $db->quote($moduleId) . ' ,0 );';
 							$db->setQuery($query);
 
-							$db->query();
+							$db->execute();
 						}
 					}
 				}
@@ -188,7 +188,7 @@ class CompojoomInstaller
 			if ($published && !$count) {
 				$query = "UPDATE #__extensions SET enabled=1 WHERE element=" . $db->Quote($pluginName) . " AND folder=" . $db->Quote($pluginType);
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 

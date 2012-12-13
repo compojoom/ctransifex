@@ -37,7 +37,7 @@ class ctransifexModelResource extends JModelLegacy {
             ->values($values);
 
         $db->setQuery($query);
-        $db->query();
+        $db->execute();
     }
 
     private function cleanDb() {
@@ -46,7 +46,7 @@ class ctransifexModelResource extends JModelLegacy {
         // remove the resources
         $query->delete('#__ctransifex_resources')->where($db->qn('project_id') . '=' . $db->q($this->projectId));
         $db->setQuery($query);
-        $db->query();
+        $db->execute();
 
         $query->clear();
 
@@ -54,7 +54,7 @@ class ctransifexModelResource extends JModelLegacy {
         $query->delete('#__ctransifex_languages')
             ->where($db->qn('project_id') . '=' . $db->q($this->projectId));
         $db->setQuery($query);
-        $db->query();
+        $db->execute();
 
         // remove all zips for the current project
         $query->clear();
@@ -62,7 +62,7 @@ class ctransifexModelResource extends JModelLegacy {
         $query->delete('#__ctransifex_zips')
             ->where($db->qn('project_id') . '=' . $db->q($this->projectId));
         $db->setQuery($query);
-        $db->query();
+        $db->execute();
     }
 
 }

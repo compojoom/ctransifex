@@ -55,7 +55,7 @@ class ctransifexModelPackage extends JModelLegacy
         )->values($values);
 
         $db->setQuery($query);
-        $db->query();
+        $db->execute();
     }
 
     public function countResources() {
