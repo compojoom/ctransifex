@@ -152,7 +152,7 @@ class ctransifexHelperPackage
      * @return string
      */
     private static function getFiles($folder) {
-//        var_dump($folder);
+
         $files = JFolder::files($folder);
         $xml = array();
         foreach($files as $file) {
