@@ -34,7 +34,10 @@ class ctransifexControllerWebhooks extends JControllerLegacy
             return false;
         }
 
-        $projectId = $input->getInt('project_id');
+		JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
+		JLog::add(serialize($input));
+
+		$projectId = $input->getInt('project_id');
 
         // get the project
         $projectModel = $this->getModel('Project', 'ctransifexModel');
@@ -58,8 +61,11 @@ class ctransifexControllerWebhooks extends JControllerLegacy
         // if we have a language just update the row
         if($language) {
             $query->clear();
-            $query->update('#__ctransifex_languages')->set('completed='.$db->q($input->getInt('completed')));
-
+            $query->update('#__ctransifex_languages')->set('completed='.$db->q($input->getInt('percent')))
+				->where('resource_id='.$db->q($language->resource_id))
+				->where('lang_name='.$db->q($langName));
+			$db->setQuery($query);
+			$db->execute();
             //TODO: create zip
         } else {
             // if we don't have a language we need to create a new row for it
@@ -79,7 +85,8 @@ class ctransifexControllerWebhooks extends JControllerLegacy
             $query->clear();
             $query->insert('#__ctransifex_languages')->columns(array('project_id','resource_id', 'lang_name', 'completed'))
                 ->values($db->q($projectId).','.$db->q($resource->id), ','.$db->q($langName).','.$db->q($input->getString('percent')));
-
+			$db->setQuery($query);
+			$db->execute();
         }
 
 
@@ -87,7 +94,10 @@ class ctransifexControllerWebhooks extends JControllerLegacy
         $query->clear();
         $query->delete('#__ctransifex_zips')->where('project_id='.$db->q($project->id))
             ->where('lang_name='.$db->q($langName));
+		$db->setQuery($query);
+		$db->execute();
 
+		JLog::add($query->dump());
         $this->updateLang($langName, $project);
 
 
