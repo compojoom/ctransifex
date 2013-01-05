@@ -6,25 +6,28 @@
 		</message>
 	</layout>
 
-    <!-- Add fields to the request variables for the layout. -->
-    <fields name="request">
-        <fieldset name="request">
+	<!-- Add fields to the request variables for the layout. -->
+	<fields name="request">
+		<fieldset name="request">
 
-            <field name="id" type="input"
-                   label="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_LABEL"
-                   required="true"
-                   description="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_DESC"
-                    />
-        </fieldset>
-    </fields>
+			<field name="id" type="sql"
+				label="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_LABEL"
+				required="true"
+				description="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_DESC"
+				query="SELECT `id`, `title` from `#__ctransifex_projects` ORDER BY `title` ASC"
+				key_field="id"
+				value_field="title"
+			/>
+		</fieldset>
+	</fields>
 
-    <!--<fields name="params">-->
-        <!--<fieldset name="basic" >-->
-            <!--<field name="id" type="input"-->
-                   <!--label="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_LABEL"-->
-                   <!--description="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_DESC"-->
-                   <!--required="true"-->
-                   <!--none="true" />-->
-        <!--</fieldset>-->
-    <!--</fields>-->
+	<!--<fields name="params">-->
+		<!--<fieldset name="basic" >-->
+			<!--<field name="id" type="input"-->
+				<!--label="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_LABEL"-->
+				<!--description="COM_CTRANSIDEX_VIEW_PROJECT_PROJECT_ID_DESC"-->
+				<!--required="true"-->
+				<!--none="true" />-->
+		<!--</fieldset>-->
+	<!--</fields>-->
 </metadata>
