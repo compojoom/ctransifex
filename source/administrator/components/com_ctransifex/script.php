@@ -389,6 +389,13 @@ class CompojoomInstaller
 	public function update($parent)
 	{
 		$this->parent = $parent;
+		// Delete old install.xml
+		jimport('joomla.filesystem.file');
+		$file	= JPATH_ADMINISTRATOR.'/components/com_ctransifex/assets/install.xml';
+		if(JFile::exists($file))
+		{
+			JFile::delete($file);
+		}
 	}
 
 	/**
