@@ -99,7 +99,7 @@ class ctransifexControllerPackager extends JControllerLegacy
      */
     private function generateInstallXml($folder, $jLang, $project)
     {
-        $dummyXml = JFile::read(JPATH_ROOT . '/media/com_ctransifex/packages/install.xml');
+        $dummyXml = JFile::read(JPATH_ROOT . '/media/com_ctransifex/packages/install.xmt');
         $params = JComponentHelper::getParams('com_ctransifex');
         $adminFiles = '';
         $frontendFiles = '';
@@ -122,7 +122,7 @@ class ctransifexControllerPackager extends JControllerLegacy
             $frontendFiles = '<files folder="frontend" target="language/'.$jLang.'">'.$frontend.'</files>';
         }
         $content = str_replace('@@FRONTEND_FILENAMES@@', $frontendFiles, $content);
-        if(JFile::write($folder . '/install.xml', $content)) {
+        if(JFile::write($folder . '/'.$project->extension_name.'-'.$jLang.'.xml', $content)) {
             return true;
         }
         return false;
