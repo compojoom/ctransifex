@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <extension type="file" method="upgrade" version="2.5">
-    <name>@@EXTENSION_NAME@@</name>
+    <name>@@EXTENSION_NAME@@ - @@LANGUAGE@@</name>
     <version>@@VERSION@@</version>
     <creationDate>@@CREATION_DATE@@</creationDate>
     <author>@@AUTHOR@@</author>
