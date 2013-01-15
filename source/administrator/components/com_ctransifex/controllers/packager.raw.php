@@ -99,7 +99,7 @@ class ctransifexControllerPackager extends JControllerLegacy
      */
     private function generateInstallXml($folder, $jLang, $project)
     {
-        $dummyXml = JFile::read(JPATH_ROOT . '/media/com_ctransifex/packages/install.xmt');
+        $dummyXml = JFile::read(JPATH_ROOT . '/media/com_ctransifex/packages/install.xml');
         $params = JComponentHelper::getParams('com_ctransifex');
         $adminFiles = '';
         $frontendFiles = '';
