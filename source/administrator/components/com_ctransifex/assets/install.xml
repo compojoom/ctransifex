@@ -8,8 +8,6 @@
     <authorUrl>@@AUTHOR_URL@@</authorUrl>
     <copyright>@@COPYRIGHT@@</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <packager>CTransifex</packager>
-    <packagerurl>https://compojoom.com</packagerurl>
     <description>
         <![CDATA[@@DESCRIPTION@@
         @@THANKS_OPENTRANSLATORS@@]]>
