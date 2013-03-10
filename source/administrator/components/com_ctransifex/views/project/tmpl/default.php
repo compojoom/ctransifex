@@ -61,6 +61,14 @@ JHtml::_('behavior.keepalive');
                             </div>
                         </div>
                         <div class="control-group">
+                        	<div class="control-label">
+                        		<?php echo $this->form->getLabel('minimum_perc'); ?>
+                        	</div>
+                        	<div class="controls">
+                        		<?php echo $this->form->getInput('minimum_perc'); ?>
+                        	</div>
+                        </div>
+                        <div class="control-group">
                             <div class="control-label">
                                 <?php echo $this->form->getLabel('extension_name'); ?>
                             </div>

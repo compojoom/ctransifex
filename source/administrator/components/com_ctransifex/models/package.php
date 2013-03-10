@@ -31,17 +31,29 @@ class ctransifexModelPackage extends JModelLegacy
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
 
-        $completed = 0;
+        $translated = 0;
+        $untranslated = 0;
 
         $allResources = $this->countResources();
 
         foreach($resources as $resource) {
-            $completed += $resource->completed;
+                $translated += $resource->translated_entities;
+                $untranslated += $resource->untranslated_entities;
+                $completed = (($translated / ($translated + $untranslated)) * 100);
         }
+        
+        // make front listing and saving of zip values depend on the value minimum_perc
+                $query ->select('minimum_perc')
+                   ->from('#__ctransifex_projects')
+                  ->where('id='.$db->quote($this->projectId));
+                      $db->setQuery($query);
+                      $result = $db->loadObject();
+                $minperc = $result->minimum_perc;
+                if ($completed >= $minperc){
 
         $values = $db->q($this->projectId) .
                 ',' . $db->q($language) .
-                ',' . $db->q((int)$completed/$allResources) .
+                ',' . $db->q((int)$completed) .
                 ',' . $db->q(JFactory::getDate()->toSql());
 
         $query->insert('#__ctransifex_zips')
@@ -56,6 +68,7 @@ class ctransifexModelPackage extends JModelLegacy
 
         $db->setQuery($query);
         $db->execute();
+        }
     }
 
     public function countResources() {

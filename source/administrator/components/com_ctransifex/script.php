@@ -59,10 +59,25 @@ class ctransifexInstallerDatabase {
 			'ALTER TABLE `#__ctransifex_projects`
 			ADD `params` LONGTEXT NOT NULL;');
 		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_projects`
+			ADD `minimum_perc` int(11) NOT NULL AFTER `alias`;');
+		$db->execute();
 
 		$db->setQuery(
 			'ALTER TABLE `#__ctransifex_languages`
 			ADD `raw_data` LONGTEXT NOT NULL;');
+		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_languages`
+			ADD `untranslated_entities` int(11) NOT NULL AFTER `completed`;');
+		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_languages`
+			ADD `translated_entities` int(11) NOT NULL AFTER `untranslated_entities`;');
 		$db->execute();
 	}
 }

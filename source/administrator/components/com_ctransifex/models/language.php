@@ -43,7 +43,9 @@ class ctransifexModelLanguage extends JModelLegacy
                     . $db->q($this->resourceId) . ','
                     . $db->q($langCode) . ','
                     . $db->q($language->completed) . ','
-					. $db->q(json_encode($language));
+                    . $db->q($language->untranslated_entities) . ','
+                    . $db->q($language->translated_entities) . ','
+		    . $db->q(json_encode($language));
             }
         }
 
@@ -54,7 +56,9 @@ class ctransifexModelLanguage extends JModelLegacy
                 $db->qn('resource_id'),
                 $db->qn('lang_name'),
                 $db->qn('completed'),
-				$db->qn('raw_data')
+                $db->qn('untranslated_entities'),
+                $db->qn('translated_entities'),
+		$db->qn('raw_data')
             )
         )->values($values);
 
@@ -85,7 +89,9 @@ class ctransifexModelLanguage extends JModelLegacy
                 $db->qn('r.resource_name'),
                 $db->qn('l.lang_name'),
                 $db->qn('l.completed'),
-				$db->qn('l.raw_data')
+                $db->qn('l.untranslated_entities'),
+                $db->qn('l.translated_entities'),
+		$db->qn('l.raw_data')
             )
         )
             ->from('#__ctransifex_languages AS l')
