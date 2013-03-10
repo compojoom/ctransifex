@@ -155,8 +155,10 @@ class ctransifexHelperPackage
 
         $files = JFolder::files($folder);
         $xml = array();
+        if($files){
         foreach($files as $file) {
             $xml[] = '<filename>'.$file.'</filename>';
+            }
         }
         return implode("\n", $xml);
     }
