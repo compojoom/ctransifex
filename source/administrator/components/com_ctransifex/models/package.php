@@ -41,6 +41,15 @@ class ctransifexModelPackage extends JModelLegacy
                 $untranslated += $resource->untranslated_entities;
                 $completed = (($translated / ($translated + $untranslated)) * 100);
         }
+        
+        // make front listing and saving of zip values depend on the value minimum_perc
+                $query ->select('minimum_perc')
+                   ->from('#__ctransifex_projects')
+                  ->where('id='.$db->quote($this->projectId));
+                      $db->setQuery($query);
+                      $result = $db->loadObject();
+                $minperc = $result->minimum_perc;
+                if ($completed >= $minperc){
 
         $values = $db->q($this->projectId) .
                 ',' . $db->q($language) .
@@ -59,6 +68,7 @@ class ctransifexModelPackage extends JModelLegacy
 
         $db->setQuery($query);
         $db->execute();
+        }
     }
 
     public function countResources() {
