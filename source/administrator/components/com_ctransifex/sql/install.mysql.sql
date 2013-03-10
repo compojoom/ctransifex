@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `#__ctransifex_projects` (
   `transifex_slug` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `alias` varchar(255) NOT NULL,
+  `minimum_perc` int(11) NOT NULL,
   `state` tinyint(4) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_by_alias` varchar(255) NOT NULL,
