@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS `#__ctransifex_languages` (
   `resource_id` int(11) NOT NULL,
   `lang_name` varchar(255) NOT NULL,
   `completed` int(11) NOT NULL,
+  `untranslated_entities` int(11) NOT NULL,
+  `translated_entities` int(11) NOT NULL,
   `raw_data` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
