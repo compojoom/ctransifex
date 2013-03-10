@@ -59,6 +59,11 @@ class ctransifexInstallerDatabase {
 			'ALTER TABLE `#__ctransifex_projects`
 			ADD `params` LONGTEXT NOT NULL;');
 		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_projects`
+			ADD `minimum_perc` int(11) NOT NULL AFTER `alias`;');
+		$db->execute();
 
 		$db->setQuery(
 			'ALTER TABLE `#__ctransifex_languages`
