@@ -64,6 +64,16 @@ class ctransifexInstallerDatabase {
 			'ALTER TABLE `#__ctransifex_languages`
 			ADD `raw_data` LONGTEXT NOT NULL;');
 		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_languages`
+			ADD `untranslated_entities` int(11) NOT NULL AFTER `completed`;');
+		$db->execute();
+		
+		$db->setQuery(
+			'ALTER TABLE `#__ctransifex_languages`
+			ADD `translated_entities` int(11) NOT NULL AFTER `untranslated_entities`;');
+		$db->execute();
 	}
 }
 
