@@ -122,7 +122,7 @@ class ctransifexControllerPackager extends JControllerLegacy
             $frontendFiles = '<files folder="frontend" target="language/'.$jLang.'">'.$frontend.'</files>';
         }
         $content = str_replace('@@FRONTEND_FILENAMES@@', $frontendFiles, $content);
-        if(JFile::write($folder . '/install.xml', $content)) {
+        if(JFile::write($folder . '/'.$project->extension_name.'-'.$jLang.'.xml', $content)) {
             return true;
         }
         return false;

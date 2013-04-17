@@ -64,6 +64,9 @@ class ctransifexHelperPackage
             if(JFile::exists($folder.'/install.xml')) {
                 JFile::delete($folder.'/install.xml');
             }
+            if(JFile::exists($folder.'/'.$project->extension_name.'-'.$jLang.'.xml')) {
+                JFile::delete($folder.'/'.$project->extension_name.'-'.$jLang.'.xml');
+            }
             return true;
         }
 
@@ -115,7 +118,7 @@ class ctransifexHelperPackage
         if(file_exists($mediaXML)) {
             $dummyXml = JFile::read($mediaXML);
         } else {
-            $dummyXml = JFile::read(JPATH_COMPONENT_ADMINISTRATOR.'/assets/install.xml');
+            $dummyXml = JFile::read(JPATH_COMPONENT_ADMINISTRATOR.'/assets/install.xmt');
         }
 
         $params = JComponentHelper::getParams('com_ctransifex');
@@ -141,7 +144,7 @@ class ctransifexHelperPackage
             $frontendFiles = '<files folder="frontend" target="language/'.$jLang.'">'.$frontend.'</files>';
         }
         $content = str_replace('@@FRONTEND_FILENAMES@@', $frontendFiles, $content);
-        if(JFile::write($folder . '/install.xml', $content)) {
+        if(JFile::write($folder . '/'.$project->extension_name.'-'.$jLang.'.xml', $content)) {
             return true;
         }
         return false;
