@@ -450,6 +450,10 @@ source_lang = en_GB
         means that something went wrong. You can contact us for support or try
         to debug the Ajax request and see what's going on.</para>
       </note>
+
+      <note>
+        <para>Packs are saved in /media/com_ctransifex/packages/</para>
+      </note>
     </section>
 
     <section>
@@ -507,7 +511,7 @@ source_lang = en_GB
 
     <para>If you encounter any problems or have any suggestions don't hesitate
     to contact us. We provide top-notch <ulink
-    url="https://compojoom.com/forum/cmc-mailchimp-for-joomla">forum
-    support</ulink>. Just drop us a line!</para>
+    url="https://compojoom.com/forum/ctransifex">forum support</ulink>. Just
+    drop us a line!</para>
   </chapter>
 </book>
