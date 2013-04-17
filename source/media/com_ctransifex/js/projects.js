@@ -147,12 +147,17 @@ var projects = new Class({
                 token:self.options.token,
                 'project-id':sessionStorage.getItem('project-id'),
                 language:language
-            }
+            };
             Request.addRequest(
                 new Request.JSON({
                     url:'index.php?option=com_ctransifex&task=transifex.langpack&format=raw',
                     data:data,
                     link:'chain',
+	                onRequest: function() {
+		                new Element('div', {
+			                html: 'We are trying to generate zip for ' + language
+		                }).inject(self.form.getElement('div'));
+	                },
                     onComplete:function (data) {
                         if (data && data.status == 'success') {
                             new Element('div', {

@@ -17,17 +17,42 @@ class ctransifexHelperPackage
         // find out the fileName and his location
         $fileFilter = preg_split('#/|\\\#', $config[$project->transifex_slug.'.'.$resource]['file_filter']);
         $fileName = str_replace('<lang>', $jLang, end($fileFilter));
-
+		$isAdmin = false;
+	    $isInstall = false;
         $adminPath = JPATH_ROOT . '/media/com_ctransifex/packages/'.$project->transifex_slug.'/'.$jLang.'/admin/';
         $frontendPath = JPATH_ROOT . '/media/com_ctransifex/packages/'.$project->transifex_slug.'/'.$jLang.'/frontend/';
+        $installPath = JPATH_ROOT . '/media/com_ctransifex/packages/'.$project->transifex_slug.'/'.$jLang.'/installation/';
+	    $path = $frontendPath.$fileName;
+	    $params = new JRegistry($project->params);
 
-        if(in_array('admin', $fileFilter) || in_array('administrator', $fileFilter) || in_array('backend', $fileFilter)) {
-            $path = $adminPath.$fileName;
-        } else {
-            $path = $frontendPath.$fileName;
-        }
+	    if($params->get('determine_location', 1)) {
+	        if(in_array('admin', $fileFilter) || in_array('administrator', $fileFilter) || in_array('backend', $fileFilter)) {
+	            $isAdmin = true;
+	        }
 
-        if(Jfile::write($path, $file['data'])){
+		    if(in_array('install', $fileFilter) || in_array('installation', $fileFilter)) {
+			    $isInstall = true;
+		    }
+	    } else {
+		    if(strstr($resource, 'admin') || strstr($resource, 'administrator') || strstr($resource, 'backend')) {
+			    $isAdmin = true;
+		    }
+
+		    if(strstr($resource, 'install') || strstr($resource, 'installation')) {
+			    $isInstall = true;
+		    }
+	    }
+
+	    if($isAdmin) {
+		    $path = $adminPath.$fileName;
+	    }
+
+	    if($isInstall) {
+		    $path = $installPath.$fileName;
+	    }
+
+
+	    if(Jfile::write($path, $file['data'])){
             return true;
         }
 
