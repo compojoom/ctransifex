@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Dimitrov - compojoom.com
+ * @author     Daniel Dimitrov - compojoom.com
  * @date: 24.09.12
  *
  * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
@@ -10,153 +10,199 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.filesystem.folder');
 
-class ctransifexControllerTransifex extends JControllerLegacy {
+class ctransifexControllerTransifex extends JControllerLegacy
+{
 
-    public function __construct(array $config = array()) {
-        parent::__construct($config);
+	public function __construct(array $config = array())
+	{
+		parent::__construct($config);
 
-        // we need the project data everywhere in the controller, so let's get it!
-        $input = JFactory::getApplication()->input;
-        $projectModel = $this->getModel('Project', 'ctransifexModel');
-        $this->project = $projectModel->getItem($input->getInt('project-id'));
-    }
+		// we need the project data everywhere in the controller, so let's get it!
+		$input = JFactory::getApplication()->input;
+		$projectModel = $this->getModel('Project', 'ctransifexModel');
+		$this->project = $projectModel->getItem($input->getInt('project-id'));
+	}
 
-    public function resources() {
-        $this->checkSession();
+	public function resources()
+	{
+		$this->checkSession();
 
-        $project = $this->project;
+		$project = $this->project;
 
-        $resources = ctransifexHelperTransifex::getData($project->transifex_slug.'/resources/');
+		$resources = ctransifexHelperTransifex::getData($project->transifex_slug . '/resources/');
 
-        if(isset($resources['info']) && $resources['info']['http_code'] != 200) {
-            $response['message'] = $resources['data'];
-            $response['status'] = 'failure';
+		if (isset($resources['info']) && $resources['info']['http_code'] != 200)
+		{
+			$response['message'] = $resources['data'];
+			$response['status'] = 'failure';
 
-        } else {
-            $resources = json_decode($resources['data']);
-            foreach($resources as $resource) {
-                $response['data'][] = $resource->slug;
-            }
-            // if we have resources add them to the db
-            if(is_array($response['data'])) {
-                $model = $this->getModel('Resource', 'ctransifexModel', array('project_id' => $project->id));
+		}
+		else
+		{
+			$resources = json_decode($resources['data']);
+			foreach ($resources as $resource)
+			{
+				$response['data'][] = $resource->slug;
+			}
+			// if we have resources add them to the db
+			if (is_array($response['data']))
+			{
+				$model = $this->getModel('Resource', 'ctransifexModel', array('project_id' => $project->id));
 
-                $model->add($response['data']);
-            }
+				$model->add($response['data']);
+			}
 
-            $response['status'] = 'success';
-        }
+			$response['status'] = 'success';
+		}
 
-        echo json_encode($response);
-        jexit();
-    }
+		echo json_encode($response);
+		jexit();
+	}
 
-    /**
-     * Get language stats per resource
-     */
-    public function languageStats() {
-        $this->checkSession();
+	/**
+	 * Get language stats per resource
+	 */
+	public function languageStats()
+	{
+		$this->checkSession();
 
-        $input = JFactory::getApplication()->input;
-        $resource = $input->get('resource');
-        $project = $this->project;
+		$input = JFactory::getApplication()->input;
+		$resource = $input->get('resource');
+		$project = $this->project;
 
-        $path = $project->transifex_slug.'/resource/'.$resource.'/stats/';
-        $txData =  (ctransifexHelperTransifex::getData($path));
+		$path = $project->transifex_slug . '/resource/' . $resource . '/stats/';
+		$txData = (ctransifexHelperTransifex::getData($path));
 
-        if(isset($txData['info']) && $txData['info']['http_code'] == 200) {
-            $stats = get_object_vars(json_decode($txData['data']));
-            if(is_array($stats)) {
-                $response['status'] = 'success';
-                $response['data'] = array_keys($stats);
+		if (isset($txData['info']) && $txData['info']['http_code'] == 200)
+		{
+			$stats = get_object_vars(json_decode($txData['data']));
+			if (is_array($stats))
+			{
+				$response['status'] = 'success';
+				$response['data'] = array_keys($stats);
 
-                $model = $this->getModel('language', 'ctransifexModel', array('project' => $project, 'resource' => $resource));
+				$model = $this->getModel('language', 'ctransifexModel', array('project' => $project, 'resource' => $resource));
 
-                $model->add($stats);
-            }
-        } else {
-            $response['status'] = 'failure';
-            $response['data'] = $txData['data'];
-        }
+				$model->add($stats);
+			}
+		}
+		else
+		{
+			$response['status'] = 'failure';
+			$response['data'] = $txData['data'];
+		}
 
-        echo json_encode($response);
-        jexit();
-    }
+		echo json_encode($response);
+		jexit();
+	}
 
-    public function langpack() {
-        $this->checkSession();
+	/**
+	 * Downloads translations for all resources for a language and zips them
+	 */
+	public function langpack()
+	{
+		$this->checkSession();
+		$minPerc = 0;
+		$input = JFactory::getApplication()->input;
+		$project = $this->project;
+		$config = parse_ini_string($project->transifex_config, true);
 
-        $input = JFactory::getApplication()->input;
-        $project = $this->project;
+		// take the minPerc variable from the config
+		if (isset($config['main']['minimum_perc']))
+		{
+			$minPerc = $config['main']['minimum_perc'];
+		}
 
-        $lang = $input->getString('language');
-        $jLang = ctransifexHelperTransifex::getJLangCode($lang, parse_ini_string($this->project->transifex_config, true));
+		$lang = $input->getString('language');
+		$jLang = ctransifexHelperTransifex::getJLangCode($lang, parse_ini_string($this->project->transifex_config, true));
 
-        if($jLang) {
-            $model = $this->getModel('Language', 'ctransifexModel', array('project' => $project));
-            $resources = $model->getResourcesForLang($jLang);
+		if ($jLang)
+		{
+			$model = $this->getModel('Language', 'ctransifexModel', array('project' => $project));
+			$resources = $model->getResourcesForLang($jLang);
 
-            foreach($resources as $resource) {
-                if(!$this->langFile($resource->resource_name, $lang)) {
-                    JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
-                    JLog::add('something went wrong when we tried to get the ' . $lang . ' for the ' . $resource->resource_name . ' resource');
-                }
-            }
+			foreach ($resources as $resource)
+			{
+				$langInfo = $model->getLangInfo($jLang, $resource->resource_name);
+				// check if we have a minPerc for this resource (if not use the main Perc)
+				if (isset($config[$project->transifex_slug . '.' . $resource->resource_name]['minimum_perc']))
+				{
+					$minPerc = $config[$project->transifex_slug . '.' . $resource->resource_name]['minimum_perc'];
+				}
 
-            if(ctransifexHelperPackage::package($jLang, $project)) {
-                $packageModel = $this->getModel('Package', 'ctransifexModel', array('project' => $project));
-                $packageModel->add($resources, $jLang);
-                $response['message'] = 'We have created a zip package for ' . $jLang;
-                $response['status'] = 'success';
-            } else {
-                JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
-                JLog::add('we couldn\t package ' . $lang );
-            }
+				// download the file only if necessary
+				if ($minPerc == 0 || $minPerc < $langInfo->completed)
+				{
+					if (!$this->langFile($resource->resource_name, $lang, $model))
+					{
+						JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
+						JLog::add('something went wrong when we tried to get the ' . $lang . ' for the ' . $resource->resource_name . ' resource');
+					}
+				}
+			}
 
-            echo json_encode($response);
-        }
+			if (ctransifexHelperPackage::package($jLang, $project))
+			{
+				$packageModel = $this->getModel('Package', 'ctransifexModel', array('project' => $project));
+				$packageModel->add($resources, $jLang);
+				$response['message'] = 'We have created a zip package for ' . $jLang;
+				$response['status'] = 'success';
+			}
+			else
+			{
+				JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
+				JLog::add('we couldn\t package ' . $lang);
+			}
+
+			echo json_encode($response);
+		}
 
 
-        jexit();
-    }
+		jexit();
+	}
 
-    /**
-     * Get the language files from transifex
-     */
-    public function langFile($resource, $lang) {
-        $this->checkSession();
+	/**
+	 * Get the language files from transifex
+	 */
+	public function langFile($resource, $lang)
+	{
+		$this->checkSession();
 
-        $project = $this->project;
+		$project = $this->project;
 
-        $config = parse_ini_string($project->transifex_config, true);
+		$config = parse_ini_string($project->transifex_config, true);
 
-        $path = $project->transifex_slug . '/resource/'.$resource.'/translation/'.$lang.'/?file';
+		$path = $project->transifex_slug . '/resource/' . $resource . '/translation/' . $lang . '/?file';
 
-        $file = ctransifexHelperTransifex::getData($path);
+		$file = ctransifexHelperTransifex::getData($path);
 
-        if(isset($file['info']) && $file['info']['http_code'] == 200) {
-            if(isset($config[$project->transifex_slug.'.'.$resource])) {
-                $jlang = ctransifexHelperTransifex::getJLangCode($lang, $config);
-                return ctransifexHelperPackage::saveLangFile($file, $jlang, $project,$resource, $config);
-            }
-        }
+		if (isset($file['info']) && $file['info']['http_code'] == 200)
+		{
+			if (isset($config[$project->transifex_slug . '.' . $resource]))
+			{
+				$jlang = ctransifexHelperTransifex::getJLangCode($lang, $config);
+				return ctransifexHelperPackage::saveLangFile($file, $jlang, $project, $resource, $config);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * @return mixed - returns true if the token is ok or just stops the application if it is not
-     */
-    private function checkSession() {
-        $input = JFactory::getApplication()->input;
-        if(JSession::getFormToken() != $input->get('token')) {
-            $response['status'] = 'failure';
-            $response['message'] = 'Invalid session token. Maybe your session expired???';
+	/**
+	 * @return mixed - returns true if the token is ok or just stops the application if it is not
+	 */
+	private function checkSession()
+	{
+		$input = JFactory::getApplication()->input;
+		if (JSession::getFormToken() != $input->get('token'))
+		{
+			$response['status'] = 'failure';
+			$response['message'] = 'Invalid session token. Maybe your session expired???';
 
-            echo json_encode($response);
-            jexit();
-        }
+			echo json_encode($response);
+			jexit();
+		}
 
-        return true;
-    }
+		return true;
+	}
 }
