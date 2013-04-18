@@ -48,6 +48,8 @@ class com_ctransifexInstallerScript extends CompojoomInstaller
 					break;
 			}
 		}
+
+		echo $this->displayInfoInstallation();
 	}
 
 }
@@ -227,6 +229,37 @@ class CompojoomInstaller
 		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE name = ' . $db->quote($this->extension));
 		$manifest = json_decode($db->loadResult(), true);
 		return $manifest[$name];
+	}
+
+	public function addCss() {
+		$css = '<style type="text/css">
+					.compojoom-info {
+						background-color: #D9EDF7;
+					    border-color: #BCE8F1;
+					    color: #3A87AD;
+					    border-radius: 4px 4px 4px 4px;
+					    padding: 8px 35px 8px 14px;
+					    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+					    margin-bottom: 18px;
+					}
+
+				</style>
+				';
+		return $css;
+	}
+
+	public function displayInfoInstallation() {
+		$html[] = $this->addCSS();
+		$html[] = '<div class="compojoom-info alert alert-info">'
+			. JText::_('COM_CTRANSIFEX_INSTALLATION_SUCCESS') . '</div>';
+
+		$html[] .= '<p>'.JText::_('COM_CTRANSIFEX_LATEST_NEWS_PROMOTIONS').':</p>';
+		$html[] .= '<table><tr><td>'. JText::_('COM_CTRANSIFEX_LIKE_FB').': </td><td><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Ffacebook.com%2Fcompojoom&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=119257468194823" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></td></tr>
+							<tr><td>'.JText::_('COM_CTRANSIFEX_FOLLOW_TWITTER').': </td><td><a href="https://twitter.com/compojoom" class="twitter-follow-button" data-show-count="false">Follow @compojoom</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></td></tr></table>';
+
+
+		return implode('', $html);
 	}
 
 	public function renderModuleInfoInstall($modules) {
