@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+require_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
+
 // thank you for this black magic Nickolas :)
 // Magic: merge the default translation with the current translation
 $jlang = JFactory::getLanguage();

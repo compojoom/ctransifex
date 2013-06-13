@@ -23,7 +23,7 @@
         ##FRONTENDLANGUAGEFILES##
 	</languages>
 	<administration>
-		<menu>COM_@@COMPONENTNAMEUPPERCASE@@</menu>
+		<menu>COM_CTRANSIFEX</menu>
 		<submenu>
 			<menu view="projects">COM_CTRANSIFEX_PROJECTS</menu>
 			<menu view="liveupdate">COM_CTRANSIFEX_LIVEUPDATE</menu>
@@ -35,7 +35,7 @@
             ##ADMINLANGUAGEFILES##
         </languages>
 	</administration>
-	<media destination="com_@@COMPONENTNAME@@" folder="media/com_@@COMPONENTNAME@@">
+	<media destination="com_ctransifex" folder="media/com_ctransifex">
         ##MEDIAPACKAGEFILES##
 	</media>
 
