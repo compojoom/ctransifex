@@ -26,6 +26,11 @@ $domready = "window.addEvent('domready', function() {
 $document->addScriptDeclaration($domready);
 ?>
 <div class="compojoom-bootstrap">
+	<?php if(!CTRANSIFEX_PRO) : ?>
+	<div class="alert alert-info">
+		<?php echo JText::sprintf('COM_CTRANSIFEX_GET_SUB_FOR_PRO_PROJECTS', 'https://compojoom.com/subscriptions/levels'); ?>
+	</div>
+	<?php endif; ?>
 	<div>
 		<form action="<?php echo JRoute::_('index.php?option=com_ctransifex&view=projects'); ?>"
 		      id="adminForm"
@@ -53,44 +58,50 @@ $document->addScriptDeclaration($domready);
 				</tr>
 				</thead>
 				<tbody>
-				<?php foreach ($this->items as $i => $item) : ?>
-					<?php
-					$canChange = $user->authorise('core.edit.state', 'com_ctransifex.project.' . $item->id);
-					?>
-					<tr>
-						<td>
-							<?php echo JHtml::_('grid.id', $i, $item->id); ?>
-						</td>
-						<td>
-							<?php echo JHtml::_('jgrid.published', $item->state, $i, 'projects.', $canChange, 'cb'); ?>
-							<?php if ($config->get('tx_username') && $config->get('tx_password')) : ?>
-								<a href="#" class="btn ctransifex-project-data"
-								   data-id="<?php echo $item->id; ?>"
-								   title="<?php echo JText::_('COM_CTRANSIFEX_LOAD_TRANSIFEX_PROJECT_DATA'); ?>"
-								   data-toggle="ctransifex">
-									<i class="icon-loop icon-joomla25"></i>
+				<?php if(count($this->items)) : ?>
+					<?php foreach ($this->items as $i => $item) : ?>
+						<?php
+						$canChange = $user->authorise('core.edit.state', 'com_ctransifex.project.' . $item->id);
+						?>
+						<tr>
+							<td>
+								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+							</td>
+							<td>
+								<?php echo JHtml::_('jgrid.published', $item->state, $i, 'projects.', $canChange, 'cb'); ?>
+								<?php if ($config->get('tx_username') && $config->get('tx_password')) : ?>
+									<a href="#" class="btn ctransifex-project-data"
+									   data-id="<?php echo $item->id; ?>"
+									   title="<?php echo JText::_('COM_CTRANSIFEX_LOAD_TRANSIFEX_PROJECT_DATA'); ?>"
+									   data-toggle="ctransifex">
+										<i class="icon-loop icon-joomla25"></i>
+									</a>
+								<?php endif; ?>
+							</td>
+							<td>
+								<a href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=project.edit&id=' . $item->id); ?>"
+								   title="<?php echo JText::_('JACTION_EDIT'); ?>">
+									<?php echo $item->title; ?>
 								</a>
-							<?php endif; ?>
-						</td>
-						<td>
-							<a href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=project.edit&id=' . $item->id); ?>"
-							   title="<?php echo JText::_('JACTION_EDIT'); ?>">
-								<?php echo $item->title; ?>
-							</a>
-						</td>
-						<td class="small hidden-phone">
-							<?php echo $this->escape($item->access_level); ?>
-						</td>
-						<td>
-							<?php if ($config->get('transifex_webhook_key')) : ?>
-								<?php echo JURI::root(); ?>index.php?option=com_ctransifex&key=<?php echo $config->get('transifex_webhook_key'); ?>&task=webhooks.webhook&project_id=<?php echo $item->id; ?>
-							<?php else : ?>
-								<?php echo JText::_('COM_CTRANSIFEX_NO_GLOBAL_WEBHOOKS_KEY'); ?>
-							<?php endif; ?>
-						</td>
+							</td>
+							<td class="small hidden-phone">
+								<?php echo $this->escape($item->access_level); ?>
+							</td>
+							<td>
+								<?php if ($config->get('transifex_webhook_key')) : ?>
+									<?php echo JURI::root(); ?>index.php?option=com_ctransifex&key=<?php echo $config->get('transifex_webhook_key'); ?>&task=webhooks.webhook&project_id=<?php echo $item->id; ?>
+								<?php else : ?>
+									<?php echo JText::_('COM_CTRANSIFEX_NO_GLOBAL_WEBHOOKS_KEY'); ?>
+								<?php endif; ?>
+							</td>
 
+						</tr>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan="5"><?php echo JText::_('COM_CTRANSIFEX_NO_PROJECTS_YET'); ?></td>
 					</tr>
-				<?php endforeach; ?>
+				<?php endif; ?>
 				</tbody>
 			</table>
 			<?php echo $this->pagination->getListFooter(); ?>
@@ -102,6 +113,11 @@ $document->addScriptDeclaration($domready);
 			<?php echo JHtml::_('form.token'); ?>
 		</form>
 	</div>
+	<?php if(CTRANSIFEX_PRO) : ?>
+		<div class="alert alert-info">
+			<?php echo JText::_('COM_CTRANSIFEX_THANKYOU_SUBSCRIPTION'); ?>
+		</div>
+	<?php endif; ?>
 	<div class="clr"></div>
 	<div>
 		<div class="fluid-row">
