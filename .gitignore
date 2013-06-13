@@ -6,3 +6,5 @@
 packages
 /tx.exe
 /docs/ctransifex.xml~
+
+/source/administrator/components/com_ctransifex/version.php
