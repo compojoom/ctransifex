@@ -1,7 +1,7 @@
 <?php
 /**
- * @author     Daniel Dimitrov - compojoom.com
- * @date: 24.09.12
+ * @author     Daniel Dimitrov <daniel@compojoom.com>
+ * @date       24.09.12
  *
  * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
@@ -10,19 +10,33 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.filesystem.folder');
 
-class ctransifexControllerTransifex extends JControllerLegacy
+/**
+ * Class ctransifexControllerTransifex
+ *
+ * @since  1
+ */
+class CtransifexControllerTransifex extends JControllerLegacy
 {
-
+	/**
+	 * The constructor
+	 *
+	 * @param   array  $config  - the controller config
+	 */
 	public function __construct(array $config = array())
 	{
 		parent::__construct($config);
 
-		// we need the project data everywhere in the controller, so let's get it!
+		// We need the project data everywhere in the controller, so let's get it!
 		$input = JFactory::getApplication()->input;
 		$projectModel = $this->getModel('Project', 'ctransifexModel');
 		$this->project = $projectModel->getItem($input->getInt('project-id'));
 	}
 
+	/**
+	 * Gets the project resources
+	 *
+	 * @return void
+	 */
 	public function resources()
 	{
 		$this->checkSession();
@@ -40,11 +54,13 @@ class ctransifexControllerTransifex extends JControllerLegacy
 		else
 		{
 			$resources = json_decode($resources['data']);
+
 			foreach ($resources as $resource)
 			{
 				$response['data'][] = $resource->slug;
 			}
-			// if we have resources add them to the db
+
+			// If we have resources add them to the db
 			if (is_array($response['data']))
 			{
 				$model = $this->getModel('Resource', 'ctransifexModel', array('project_id' => $project->id));
@@ -61,6 +77,8 @@ class ctransifexControllerTransifex extends JControllerLegacy
 
 	/**
 	 * Get language stats per resource
+	 *
+	 * @return void
 	 */
 	public function languageStats()
 	{
@@ -76,6 +94,7 @@ class ctransifexControllerTransifex extends JControllerLegacy
 		if (isset($txData['info']) && $txData['info']['http_code'] == 200)
 		{
 			$stats = get_object_vars(json_decode($txData['data']));
+
 			if (is_array($stats))
 			{
 				$response['status'] = 'success';
@@ -98,6 +117,8 @@ class ctransifexControllerTransifex extends JControllerLegacy
 
 	/**
 	 * Downloads translations for all resources for a language and zips them
+	 *
+	 * @return void
 	 */
 	public function langpack()
 	{
@@ -107,7 +128,7 @@ class ctransifexControllerTransifex extends JControllerLegacy
 		$project = $this->project;
 		$config = parse_ini_string($project->transifex_config, true);
 
-		// take the minPerc variable from the config
+		// Take the minPerc variable from the config
 		if (isset($config['main']['minimum_perc']))
 		{
 			$minPerc = $config['main']['minimum_perc'];
@@ -124,13 +145,14 @@ class ctransifexControllerTransifex extends JControllerLegacy
 			foreach ($resources as $resource)
 			{
 				$langInfo = $model->getLangInfo($jLang, $resource->resource_name);
-				// check if we have a minPerc for this resource (if not use the main Perc)
+
+				// Check if we have a minPerc for this resource (if not use the main Perc)
 				if (isset($config[$project->transifex_slug . '.' . $resource->resource_name]['minimum_perc']))
 				{
 					$minPerc = $config[$project->transifex_slug . '.' . $resource->resource_name]['minimum_perc'];
 				}
 
-				// download the file only if necessary
+				// Download the file only if necessary
 				if ($minPerc == 0 || $minPerc < $langInfo->completed)
 				{
 					if (!$this->langFile($resource->resource_name, $lang, $model))
@@ -144,7 +166,7 @@ class ctransifexControllerTransifex extends JControllerLegacy
 			if (ctransifexHelperPackage::package($jLang, $project))
 			{
 				$packageModel = $this->getModel('Package', 'ctransifexModel', array('project' => $project));
-				$packageModel->add($resources, $jLang);
+				$packageModel->add($jLang, $lang);
 				$response['message'] = 'We have created a zip package for ' . $jLang;
 				$response['status'] = 'success';
 			}
@@ -163,6 +185,11 @@ class ctransifexControllerTransifex extends JControllerLegacy
 
 	/**
 	 * Get the language files from transifex
+	 *
+	 * @param   string  $resource  - the resource name
+	 * @param   string  $lang      - the lang name
+	 *
+	 * @return bool
 	 */
 	public function langFile($resource, $lang)
 	{
@@ -181,6 +208,7 @@ class ctransifexControllerTransifex extends JControllerLegacy
 			if (isset($config[$project->transifex_slug . '.' . $resource]))
 			{
 				$jlang = ctransifexHelperTransifex::getJLangCode($lang, $config);
+
 				return ctransifexHelperPackage::saveLangFile($file, $jlang, $project, $resource, $config);
 			}
 		}
@@ -189,11 +217,14 @@ class ctransifexControllerTransifex extends JControllerLegacy
 	}
 
 	/**
-	 * @return mixed - returns true if the token is ok or just stops the application if it is not
+	 * Checks the user session
+	 *
+	 * @return bool
 	 */
 	private function checkSession()
 	{
 		$input = JFactory::getApplication()->input;
+
 		if (JSession::getFormToken() != $input->get('token'))
 		{
 			$response['status'] = 'failure';
