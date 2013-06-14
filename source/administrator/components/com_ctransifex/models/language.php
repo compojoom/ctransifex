@@ -1,7 +1,7 @@
 <?php
 /**
- * @author     Daniel Dimitrov - compojoom.com
- * @date: 21.09.12
+ * @author     Daniel Dimitrov <daniel@compojoom.com>
+ * @date       21.09.12
  *
  * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
@@ -11,9 +11,18 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.modellegacy');
 
+/**
+ * Class ctransifexModelLanguage
+ *
+ * @version 1
+ */
 class ctransifexModelLanguage extends JModelLegacy
 {
-
+	/**
+	 * Constructor
+	 *
+	 * @param   array  $config  - array with config options
+	 */
 	public function __construct(array $config = array())
 	{
 		if (isset($config['project']))
@@ -30,10 +39,16 @@ class ctransifexModelLanguage extends JModelLegacy
 		parent::__construct($config);
 	}
 
+	/**
+	 * Add languages to DB
+	 *
+	 * @param   array  $languages  - the languages info
+	 *
+	 * @return void
+	 */
 	public function add($languages = array())
 	{
-
-		// now add the resources
+		// Now add the resources
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$config = parse_ini_string($this->project->transifex_config, true);
@@ -41,6 +56,7 @@ class ctransifexModelLanguage extends JModelLegacy
 		foreach ($languages as $key => $language)
 		{
 			$langCode = ctransifexHelperTransifex::getJLangCode($key, $config);
+
 			if ($langCode)
 			{
 				$values[] = $db->q($this->projectId) . ','
@@ -66,7 +82,13 @@ class ctransifexModelLanguage extends JModelLegacy
 		$db->execute();
 	}
 
-
+	/**
+	 * Gets resource information
+	 *
+	 * @param   string  $name  - the resource name
+	 *
+	 * @return mixed
+	 */
 	private function getResource($name)
 	{
 		$db = JFactory::getDbo();
@@ -75,9 +97,17 @@ class ctransifexModelLanguage extends JModelLegacy
 		$query->select('id')->from('#__ctransifex_resources')->where($db->qn('resource_name') . '=' . $db->q($name))
 			->where($db->qn('project_id') . '=' . $db->q($this->projectId));
 		$db->setQuery($query, 0, 1);
+
 		return $db->loadObject()->id;
 	}
 
+	/**
+	 * Gets language info for a resource
+	 *
+	 * @param   string  $jlang  - the joomla lang
+	 *
+	 * @return mixed
+	 */
 	public function getResourcesForLang($jlang)
 	{
 		$db = JFactory::getDbo();
@@ -98,9 +128,16 @@ class ctransifexModelLanguage extends JModelLegacy
 			->where($db->qn('l.project_id') . '=' . $db->q($this->projectId));
 
 		$db->setQuery($query);
+
 		return $db->loadObjectList();
 	}
 
+	/**
+	 * @param   string  $jLang         - the joomla lang
+	 * @param   string  $resourceName  - the resource name
+	 *
+	 * @return mixed
+	 */
 	public function getLangInfo($jLang, $resourceName)
 	{
 		$db = JFactory::getDbo();
@@ -113,6 +150,7 @@ class ctransifexModelLanguage extends JModelLegacy
 			->where($db->qn('l.lang_name') . '=' . $db->q($jLang));
 
 		$db->setQuery($query, 0, 1);
+
 		return $db->loadObject();
 	}
 }
