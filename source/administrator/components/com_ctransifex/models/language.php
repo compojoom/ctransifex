@@ -102,7 +102,7 @@ class ctransifexModelLanguage extends JModelLegacy
 	}
 
 	/**
-	 * Gets language info for a resource
+	 * Gets all resources for the language
 	 *
 	 * @param   string  $jlang  - the joomla lang
 	 *
@@ -133,6 +133,8 @@ class ctransifexModelLanguage extends JModelLegacy
 	}
 
 	/**
+	 * Gets language info for a resource
+	 *
 	 * @param   string  $jLang         - the joomla lang
 	 * @param   string  $resourceName  - the resource name
 	 *
