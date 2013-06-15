@@ -1,7 +1,7 @@
 <?php
 /**
- * @author Daniel Dimitrov - compojoom.com
- * @date: 21.09.12
+ * @author     Daniel Dimitrov <daniel@compojoom.com>
+ * @date       21.09.12
  *
  * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
@@ -11,61 +11,90 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.modellegacy');
 
-class ctransifexModelPackage extends JModelLegacy
+/**
+ * Class ctransifexModelPackage
+ *
+ * @since  1
+ */
+class CtransifexModelPackage extends JModelLegacy
 {
+	/**
+	 * Constructor
+	 *
+	 * @param   array  $config  - An array of configuration options (name, state, dbo, table_path, ignore_request).
+	 */
+	public function __construct(array $config = array())
+	{
+		if (isset($config['project']))
+		{
+			$this->projectId = $config['project']->id;
+			$this->project = $config['project'];
+		}
 
-    public function __construct(array $config = array())
-    {
-        if (isset($config['project'])) {
-            $this->projectId = $config['project']->id;
-            $this->project = $config['project'];
-        }
+		parent::__construct($config);
+	}
 
-        parent::__construct($config);
-    }
+	/**
+	 * Ads the lang pack to the DB
+	 *
+	 * @param   string  $language       - the joomla lang
+	 * @param   string  $transifexLang  - the transifexLang
+	 *
+	 * @return void
+	 */
+	public function add($resources, $language)
+	{
+		// Now add the resources
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$totalStrings = 0;
+		$translatedStrings = 0;
 
-    public function add($resources, $language)
-    {
+		foreach ($resources as $resource)
+		{
+			$stats = json_decode($resource->raw_data);
 
-        // now add the resources
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
+			if ($stats)
+			{
+				$translatedStrings += (int) $stats->translated_entities;
+				$totalStrings += (int) $stats->translated_entities + (int) $stats->untranslated_entities;
 
-        $completed = 0;
+			}
+		}
 
-        $allResources = $this->countResources();
+		$values = $db->q($this->projectId) .
+			',' . $db->q($language) .
+			',' . $db->q((int) (($translatedStrings / $totalStrings) * 100)) .
+			',' . $db->q(JFactory::getDate()->toSql());
 
-        foreach($resources as $resource) {
-            $completed += $resource->completed;
-        }
+		$query->insert('#__ctransifex_zips')
+			->columns(
+				array(
+					$db->qn('project_id'),
+					$db->qn('lang_name'),
+					$db->qn('completed'),
+					$db->qn('created')
+				)
+			)->values($values);
 
-        $values = $db->q($this->projectId) .
-                ',' . $db->q($language) .
-                ',' . $db->q((int)$completed/$allResources) .
-                ',' . $db->q(JFactory::getDate()->toSql());
+		$db->setQuery($query);
+		$db->execute();
+	}
 
-        $query->insert('#__ctransifex_zips')
-            ->columns(
-            array(
-                $db->qn('project_id'),
-                $db->qn('lang_name'),
-                $db->qn('completed'),
-                $db->qn('created')
-            )
-        )->values($values);
+	/**
+	 * Count the resources
+	 *
+	 * @return int
+	 */
+	public function countResources()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery('true');
 
-        $db->setQuery($query);
-        $db->execute();
-    }
+		$query->select('COUNT(id) as count')->from('#__ctransifex_resources')->where('project_id = ' . $db->q($this->projectId));
 
-    public function countResources() {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery('true');
+		$db->setQuery($query);
 
-        $query->select('COUNT(id) as count')->from('#__ctransifex_resources')->where('project_id = ' .$db->q($this->projectId));
-
-        $db->setQuery($query);
-
-        return $db->loadObject()->count;
-    }
+		return $db->loadObject()->count;
+	}
 }

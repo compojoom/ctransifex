@@ -158,7 +158,7 @@ class CtransifexControllerTransifex extends JControllerLegacy
 					if (!$this->langFile($resource->resource_name, $lang, $model))
 					{
 						JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
-						JLog::add('something went wrong when we tried to get the ' . $lang . ' for the ' . $resource->resource_name . ' resource');
+						JLog::add('something went wrong when we tried to get the ' . $jLang . ' for the ' . $resource->resource_name . ' resource');
 					}
 				}
 			}
@@ -166,14 +166,14 @@ class CtransifexControllerTransifex extends JControllerLegacy
 			if (ctransifexHelperPackage::package($jLang, $project))
 			{
 				$packageModel = $this->getModel('Package', 'ctransifexModel', array('project' => $project));
-				$packageModel->add($jLang, $lang);
+				$packageModel->add($resources, $jLang);
 				$response['message'] = 'We have created a zip package for ' . $jLang;
 				$response['status'] = 'success';
 			}
 			else
 			{
 				JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
-				JLog::add('we couldn\t package ' . $lang);
+				JLog::add('we couldn\t package ' . $jLang);
 			}
 
 			echo json_encode($response);
