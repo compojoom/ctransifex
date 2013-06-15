@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  1
  */
-class ctransifexViewProjects extends JViewLegacy
+class CtransifexViewProjects extends JViewLegacy
 {
 	/**
 	 * Display
