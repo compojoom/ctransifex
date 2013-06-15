@@ -1,5 +1,6 @@
 CTransifex changelog
 
+# pagination was missing from the projects view
 ~ updated language & country database
 ~ updated default language mappings
 + added footer
