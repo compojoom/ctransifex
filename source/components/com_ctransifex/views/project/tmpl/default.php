@@ -25,7 +25,7 @@ JHtml::_('stylesheet', 'media/com_ctransifex/css/ctransifex-frontend.css');
 			<td>
 				<a href="<?php echo JRoute::_('index.php?option=com_ctransifex&view=language&zip=' . $language->id.'&project='.$this->item->id); ?>">
 					<?php if (isset($language->iso_lang_name)) : ?>
-					<?php echo $language->iso_lang_name; ?>
+					<?php echo ucfirst($language->iso_lang_name); ?>
 					<?php if (isset($language->iso_country_name) && $language->iso_country_name != '') : ?>
 						(<?php echo $language->iso_country_name; ?>)
 					<?php endif; ?>

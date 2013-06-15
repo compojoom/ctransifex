@@ -99,12 +99,15 @@ class CtransifexHelperTransifex
 				$languages[trim($langCodes[0])] = trim($langCodes[1]);
 			}
 
-			$langMap = explode(',', $projectConfig['main']['lang_map']);
-
-			foreach ($langMap as $map)
+			if (isset( $projectConfig['main']['lang_map']))
 			{
-				$langCodes = explode(':', $map);
-				$languages[trim($langCodes[0])] = trim($langCodes[1]);
+				$langMap = explode(',', $projectConfig['main']['lang_map']);
+
+				foreach ($langMap as $map)
+				{
+					$langCodes = explode(':', $map);
+					$languages[trim($langCodes[0])] = trim($langCodes[1]);
+				}
 			}
 
 			self::$languages = $languages;

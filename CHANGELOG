@@ -1,5 +1,8 @@
 CTransifex changelog
 
+~ updated language & country database
+~ updated default language mappings
++ added footer
 + added breadcrumbs
 + added a router file
 + added a language view
