@@ -25,10 +25,18 @@ class CtransifexViewProject extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$appl = JFactory::getApplication();
+		$pathway = $appl->getPathway();
 		$this->item = $this->get('Item');
 		$this->languages = $this->get('Languages');
+
+		// Add to the breadcrumb
+		$pathway->addItem($this->item->title);
+
+		// Add to the page title
 		$document = JFactory::getDocument();
 		$document->setTitle($document->getTitle() . ' ' . JText::sprintf('COM_CTRANSIFEX_TRANSLATIONS_FOR_PROJECT', $this->item->title));
+
 		parent::display();
 	}
 }
