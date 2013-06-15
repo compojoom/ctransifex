@@ -17,7 +17,7 @@ $langParts = explode('-', $language->lang_name);
 $langName = ctransifexHelperLanguage::code2ToName($langParts[0]);
 $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 ?>
-<h2><?php echo ucfirst($langName) ?> (<?php echo ucfirst($langCountry); ?>)</h2>
+<h2><?php echo $this->project->title; ?> - <?php echo ucfirst($langName) ?> (<?php echo ucfirst($langCountry); ?>)</h2>
 <div class="row-fluid ctransifex-margin">
 	<p>
 		<?php echo JText::sprintf('COM_CTRANSIFEX_LANGUAGE_COMPLETE_AT', $language->completed); ?>
@@ -66,7 +66,14 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 </div>
 <div class="row-fluid">
 	<div class="form-actions">
-		<a class="btn btn-primary"><?php echo JText::_('COM_CTRANSIFEX_DOWNLOAD_NOW'); ?></a>
-		<a class="btn "><?php echo JText::_('COM_CTRANSIFEX_HELP_IMPROVE_THIS_TRANSLATION_NOW'); ?></a>
+		<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=download.download&language=' . $language->id); ?>">
+			<?php echo JText::_('COM_CTRANSIFEX_DOWNLOAD_NOW'); ?>
+		</a>
+		<?php if ($this->project->params['display_contribute_link']) : ?>
+			<a href="http://transifex.com/projects/p/<?php echo $this->project->transifex_slug; ?>/language/<?php echo $language->lang_name; ?>"
+			   class="btn" target="_blank">
+				<?php echo JText::_('COM_CTRANSIFEX_HELP_IMPROVE_THIS_LANGUAGE_PACK'); ?>
+			</a>
+		<?php endif; ?>
 	</div>
 </div>
