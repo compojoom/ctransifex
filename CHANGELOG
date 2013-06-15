@@ -1,4 +1,5 @@
 CTransifex changelog
 
++ added a router file
 + added a language view
 # now stats are being calculated as in transifex
