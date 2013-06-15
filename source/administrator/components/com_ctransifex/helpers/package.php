@@ -205,7 +205,7 @@ class CtransifexHelperPackage
 		$adminFiles = '';
 		$frontendFiles = '';
 		$content = str_replace('@@EXTENSION_NAME@@', $project->extension_name, $dummyXml);
-		$content = str_replace('@@VERSION@@', time(), $content);
+		$content = str_replace('@@VERSION@@', date('Y-m-d-h-i-s'), $content);
 		$content = str_replace('@@CREATION_DATE@@', date('d.m.Y'), $content);
 		$content = str_replace('@@AUTHOR@@', $params->get('author'), $content);
 		$content = str_replace('@@AUTHOR_EMAIL@@', $params->get('author_email'), $content);
