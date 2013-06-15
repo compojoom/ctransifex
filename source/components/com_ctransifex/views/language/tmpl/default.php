@@ -66,9 +66,15 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 </div>
 <div class="row-fluid">
 	<div class="form-actions">
+		<?php if($language->completed) : ?>
 		<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=download.download&language=' . $language->id); ?>">
 			<?php echo JText::_('COM_CTRANSIFEX_DOWNLOAD_NOW'); ?>
 		</a>
+		<?php else: ?>
+			<div class="alert alert-error">
+				<?php echo JText::_('COM_CTRANSIFEX_NO_PACKAGE_YET'); ?>
+			</div>
+		<?php endif; ?>
 		<?php if ($this->project->params['display_contribute_link']) : ?>
 			<a href="http://transifex.com/projects/p/<?php echo $this->project->transifex_slug; ?>/language/<?php echo $language->lang_name; ?>"
 			   class="btn" target="_blank">
@@ -77,3 +83,5 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 		<?php endif; ?>
 	</div>
 </div>
+
+<?php CTransifexHelperUtils::footer(); ?>

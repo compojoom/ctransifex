@@ -31,3 +31,5 @@ JHtml::_('stylesheet', 'media/com_ctransifex/css/ctransifex-frontend.css');
         <hr />
     </section>
 <?php endforeach; ?>
+
+<?php CTransifexHelperUtils::footer(); ?>
