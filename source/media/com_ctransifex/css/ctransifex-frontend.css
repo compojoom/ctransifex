@@ -78,3 +78,7 @@
     transition: width 0.6s ease 0s;
     width: 0;
 }
+
+.ctransifex-margin {
+	margin-bottom: 20px;
+}

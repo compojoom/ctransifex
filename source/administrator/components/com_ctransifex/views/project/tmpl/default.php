@@ -30,7 +30,7 @@ JHtml::_('behavior.keepalive');
       method="post" name="adminForm" id="adminForm" class="form-validate">
     <div class="row-fluid">
 
-        <div class="span10 form-horizontal">
+        <div class="span8 form-horizontal">
             <fieldset class="adminform">
                 <div class="row-fluid">
                     <div class="span6">
@@ -81,7 +81,7 @@ JHtml::_('behavior.keepalive');
                 <?php echo $this->form->getInput('transifex_config'); ?>
             </fieldset>
         </div>
-        <div class="span2">
+        <div class="span4">
             <?php echo $this->form->getLabel('state'); ?>
             <?php echo $this->form->getInput('state'); ?>
             <?php echo $this->form->getLabel('access'); ?>

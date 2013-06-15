@@ -111,6 +111,11 @@
 			        File filter</option>
 	        </field>
 
+	        <field name="contributor_info"
+	               label="COM_CTRANSIFEX_CONTRIBUTOR_INFO_LABEL"
+	               description="COM_CTRANSIFEX_CONTRIBUTOR_INFO_DESC"
+	               filter="raw"
+	               type="editor" buttons="false" />
         </fieldset>
     </fields>
 
