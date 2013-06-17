@@ -30,7 +30,6 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 <?php if (isset($this->project->params['contributor_info'])) : ?>
 	<div class="row-fluid">
 		<div class="alert">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<?php echo $this->project->params['contributor_info']; ?>
 		</div>
 	</div>
