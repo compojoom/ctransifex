@@ -1,5 +1,6 @@
 CTransifex changelog
 
++ added an option to hide the languages that are at 0%
 + contribute now link on the resource leads directly to the editor in transifex.com
 # pagination was missing from the projects view
 ~ updated language & country database
