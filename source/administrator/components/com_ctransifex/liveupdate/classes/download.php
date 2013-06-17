@@ -1,7 +1,7 @@
 <?php
 /**
  * @package LiveUpdate
- * @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license GNU LGPLv3 or later <http://www.gnu.org/copyleft/lesser.html>
  */
 
@@ -21,7 +21,7 @@ class LiveUpdateDownloadHelper
 	public static function download($url, $target)
 	{
 		// Import Joomla! libraries
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 
 		/** @var bool Did we try to force permissions? */
 		$hackPermissions = false;
@@ -308,7 +308,7 @@ class LiveUpdateDownloadHelper
 		}
 
 		// Initialize variables
-		jimport('joomla.client.helper');
+		JLoader::import('joomla.client.helper');
 		$ftpOptions = JClientHelper::getCredentials('ftp');
 
 		// Check to make sure the path valid and clean
@@ -316,21 +316,21 @@ class LiveUpdateDownloadHelper
 
 		if ($ftpOptions['enabled'] == 1) {
 			// Connect the FTP client
-			jimport('joomla.client.ftp');
+			JLoader::import('joomla.client.ftp');
 			if(version_compare(JVERSION,'3.0','ge')) {
 				$ftp = JClientFTP::getInstance(
-					$ftpOptions['host'], $ftpOptions['port'], null,
+					$ftpOptions['host'], $ftpOptions['port'], array(),
 					$ftpOptions['user'], $ftpOptions['pass']
 				);
 			} else {
 				if(version_compare(JVERSION,'3.0','ge')) {
 					$ftp = JClientFTP::getInstance(
-						$ftpOptions['host'], $ftpOptions['port'], null,
+						$ftpOptions['host'], $ftpOptions['port'], array(),
 						$ftpOptions['user'], $ftpOptions['pass']
 					);
 				} else {
 					$ftp = JFTP::getInstance(
-						$ftpOptions['host'], $ftpOptions['port'], null,
+						$ftpOptions['host'], $ftpOptions['port'], array(),
 						$ftpOptions['user'], $ftpOptions['pass']
 					);
 				}
@@ -342,7 +342,7 @@ class LiveUpdateDownloadHelper
 			$ret = true;
 		} elseif ($ftpOptions['enabled'] == 1) {
 			// Translate path and delete
-			jimport('joomla.client.ftp');
+			JLoader::import('joomla.client.ftp');
 			$path = JPath::clean(str_replace(JPATH_ROOT, $ftpOptions['root'], $path), '/');
 			// FTP connector throws an error
 			$ret = $ftp->chmod($path, $mode);

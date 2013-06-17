@@ -1,7 +1,7 @@
 <?php
 /**
  * @package LiveUpdate
- * @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license GNU LGPLv3 or later <http://www.gnu.org/copyleft/lesser.html>
  */
 
@@ -47,7 +47,7 @@ class LiveUpdateStorageComponent extends LiveUpdateStorage
 
 		$data = $params->get(self::$key, '');
 
-		jimport('joomla.registry.registry');
+		JLoader::import('joomla.registry.registry');
 		self::$registry = new JRegistry('update');
 
 		self::$registry->loadString($data, 'INI');
@@ -87,6 +87,6 @@ class LiveUpdateStorageComponent extends LiveUpdateStorage
 			->where($db->qn('element').' = '.$db->q(self::$component));
 
 		$db->setQuery($sql);
-		$db->query();
+		$db->execute();
 	}
 }

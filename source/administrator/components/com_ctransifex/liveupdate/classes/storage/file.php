@@ -1,7 +1,7 @@
 <?php
 /**
  * @package LiveUpdate
- * @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license GNU LGPLv3 or later <http://www.gnu.org/copyleft/lesser.html>
  */
 
@@ -16,28 +16,46 @@ defined('_JEXEC') or die();
 class LiveUpdateStorageFile extends LiveUpdateStorage
 {
 	private static $filename = null;
-	
+	private static $extname = null;
+
 	public function load($config)
 	{
+		JLoader::import('joomla.registry.registry');
+		JLoader::import('joomla.filesystem.file');
+
 		$path = $config['path'];
 		$extname = $config['extensionName'];
-		$filename = "$path/$extname.updates.ini";
-		
+		$filename = "$path/$extname.updates.php";
+
+		// Kill old files
+		$filenameKill = "$path/$extname.updates.ini";
+		if (JFile::exists($filenameKill))
+		{
+			JFile::delete($filenameKill);
+		}
+
 		self::$filename = $filename;
-		
-		jimport('joomla.registry.registry');
+		self::$extname = $extname;
+
 		self::$registry = new JRegistry('update');
-		
-		jimport('joomla.filesystem.file');
+
 		if(JFile::exists(self::$filename)) {
-			self::$registry->loadFile(self::$filename, 'INI');
+			$options = array(
+				'class'	=> 'LiveUpdate' . ucwords($extname) . 'Cache'
+			);
+			self::$registry->loadFile(self::$filename, 'PHP', $options);
 		}
 	}
-	
+
 	public function save()
 	{
-		jimport('joomla.filesystem.file');
-		$data = self::$registry->toString('INI');
+		JLoader::import('joomla.registry.registry');
+		JLoader::import('joomla.filesystem.file');
+
+		$options = array(
+			'class'	=> 'LiveUpdate' . ucwords(self::$extname) . 'Cache'
+		);
+		$data = self::$registry->toString('PHP', $options);
 		JFile::write(self::$filename, $data);
 	}
-} 
+}
