@@ -29,9 +29,16 @@ class CtransifexModelProject extends JModelAdmin
 		$input = JFactory::getApplication()->input;
 		$id = $input->getInt('id', 0);
 		$query = $db->getQuery(true);
+		$params = JComponentHelper::getParams('com_ctransifex');
 
 		$query->select('*')->from('#__ctransifex_zips')
 			->where($db->qn('project_id') . '=' . $db->q($id));
+
+		// Include languages that are 0% complete?
+		if (!$params->get('show_0', 1))
+		{
+			$query->where('completed > 0');
+		}
 
 		$db->setQuery($query);
 
