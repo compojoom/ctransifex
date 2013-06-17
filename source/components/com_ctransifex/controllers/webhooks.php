@@ -57,7 +57,7 @@ class CtransifexControllerWebhooks extends JControllerLegacy
 		$this->project = $project = $projectModel->getItem($projectId);
 
 
-		$langName = ctransifexHelperTransifex::getJLangCode($input->getString('language'), parse_ini_string($this->project->transifex_config, true));
+		$langName = ctransifexHelperTransifex::getLangCode($input->getString('language'), parse_ini_string($this->project->transifex_config, true));
 
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -175,7 +175,7 @@ class CtransifexControllerWebhooks extends JControllerLegacy
 		{
 			if (isset($config[$project->transifex_slug . '.' . $resource]))
 			{
-				$jlang = ctransifexHelperTransifex::getJLangCode($txLang, $config);
+				$jlang = ctransifexHelperTransifex::getLangCode($txLang, $config);
 
 				return ctransifexHelperPackage::saveLangFile($file, $jlang, $project, $resource, $config);
 			}

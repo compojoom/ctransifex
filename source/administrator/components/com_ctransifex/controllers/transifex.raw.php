@@ -135,7 +135,7 @@ class CtransifexControllerTransifex extends JControllerLegacy
 		}
 
 		$lang = $input->getString('language');
-		$jLang = ctransifexHelperTransifex::getJLangCode($lang, parse_ini_string($this->project->transifex_config, true));
+		$jLang = ctransifexHelperTransifex::getLangCode($lang, parse_ini_string($this->project->transifex_config, true));
 
 		if ($jLang)
 		{
@@ -207,7 +207,7 @@ class CtransifexControllerTransifex extends JControllerLegacy
 		{
 			if (isset($config[$project->transifex_slug . '.' . $resource]))
 			{
-				$jlang = ctransifexHelperTransifex::getJLangCode($lang, $config);
+				$jlang = ctransifexHelperTransifex::getLangCode($lang, $config);
 
 				return ctransifexHelperPackage::saveLangFile($file, $jlang, $project, $resource, $config);
 			}

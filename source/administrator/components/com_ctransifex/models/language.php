@@ -55,7 +55,7 @@ class ctransifexModelLanguage extends JModelLegacy
 
 		foreach ($languages as $key => $language)
 		{
-			$langCode = ctransifexHelperTransifex::getJLangCode($key, $config);
+			$langCode = ctransifexHelperTransifex::getLangCode($key, $config);
 
 			if ($langCode)
 			{

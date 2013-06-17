@@ -54,21 +54,27 @@ class CtransifexHelperTransifex
 	}
 
 	/**
-	 * Gets the transifex langCode and transforms it to the joomla language code
+	 * Gets the langCode and transforms it to the format we need
+	 * en-GB : en_GB or en_GB : en-GB
 	 *
-	 * @param   string  $transifexLang  - the lang
-	 * @param   object  $projectConfig  - the config
+	 * @param   string   $lang           - the lang
+	 * @param   object   $projectConfig  - the config
+	 * @param   boolean  $transifex      - true = joomla, false = transifex
 	 *
-	 * @internal param $config
 	 * @return mixed
 	 */
-	public static function getJLangCode($transifexLang, $projectConfig)
+	public static function getLangCode($lang, $projectConfig, $transifex = false)
 	{
 		$languages = self::getLangmap($projectConfig);
 
-		if (isset($languages[$transifexLang]))
+		if ($transifex)
 		{
-			return $languages[$transifexLang];
+			$languages = array_flip($languages);
+		}
+
+		if (isset($languages[$lang]))
+		{
+			return $languages[$lang];
 		}
 		else
 		{
@@ -99,7 +105,7 @@ class CtransifexHelperTransifex
 				$languages[trim($langCodes[0])] = trim($langCodes[1]);
 			}
 
-			if (isset( $projectConfig['main']['lang_map']))
+			if (isset($projectConfig['main']['lang_map']))
 			{
 				$langMap = explode(',', $projectConfig['main']['lang_map']);
 
