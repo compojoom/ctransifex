@@ -8,19 +8,20 @@
 	<authorUrl>www.compojoom.com</authorUrl>
 	<version>@@VERSION@@</version>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
-	<description><![CDATA[CTransifex is a Joomla! extension that uses the transifex API to show the available language packages on your site]]>
+	<description>
+		<![CDATA[CTransifex is a Joomla! extension that uses the transifex API to show the available language packages on your site]]>
 	</description>
-    <scriptfile>script.php</scriptfile>
+	<scriptfile>script.php</scriptfile>
 	<install>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
 		</sql>
 	</install>
 	<files folder="components/com_@@COMPONENTNAME@@">
-        ##FRONTENDCOMPONENTPACKAGEFILES##
+		##FRONTENDCOMPONENTPACKAGEFILES##
 	</files>
 	<languages folder="language">
-        ##FRONTENDLANGUAGEFILES##
+		##FRONTENDLANGUAGEFILES##
 	</languages>
 	<administration>
 		<menu>COM_CTRANSIFEX</menu>
@@ -29,17 +30,13 @@
 			<menu view="liveupdate">COM_CTRANSIFEX_LIVEUPDATE</menu>
 		</submenu>
 		<files folder="administrator/components/com_@@COMPONENTNAME@@">
-            ##ADMINCOMPONENTPACKAGEFILES##
+			##ADMINCOMPONENTPACKAGEFILES##
 		</files>
 		<languages folder="administrator/language">
-            ##ADMINLANGUAGEFILES##
-        </languages>
+			##ADMINLANGUAGEFILES##
+		</languages>
 	</administration>
 	<media destination="com_ctransifex" folder="media/com_ctransifex">
-        ##MEDIAPACKAGEFILES##
+		##MEDIAPACKAGEFILES##
 	</media>
-
-    <updateservers>
-        <server type="extension" priority="1" name="CMC Updates"><![CDATA[ https://compojoom.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=15&dummy=extension.xml]]></server>
-    </updateservers>
 </extension>
