@@ -79,7 +79,7 @@ class CtransifexHelperTransifex
 		else
 		{
 			JLog::addLogger(array('text_file' => 'com_ctransifex.error.php'));
-			JLog::add('there is no lang map entry for ' . $transifexLang);
+			JLog::add('there is no lang map entry for ' . $lang);
 		}
 
 		return false;
