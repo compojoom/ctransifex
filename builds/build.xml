@@ -47,8 +47,6 @@
 		           type="dir" property="frontend.exist" value="yes"/>
 		<available file="${dirs.source}\language"
 		           type="dir" property="frontendLang.exist" value="yes"/>
-		<available file="${dirs.source}\media\com_${component.name}"
-		           type="dir" property="media.exist" value="yes"/>
 
 	</target>
 
@@ -60,16 +58,13 @@
 		<include name="language/*/*.com_ctransifex.**"/>
 
 		<include name="media/com_ctransifex/**"/>
+		<exclude name="media/com_ctransifex/packages/**"/>
 	</fileset>
 
 	<fileset dir="${dirs.source}/administrator/components/com_${component.name}"
 	         id="component-install">
 		<include name="${component.name}.xml"/>
 		<include name="script.php"/>
-	</fileset>
-
-	<fileset dir="${dirs.source}" id="component-core-only">
-		<!-- nothing yet -->
 	</fileset>
 
 	<fileset dir="${dirs.source}" id="component-pro">
@@ -80,6 +75,7 @@
 		<include name="language/*/*.com_ctransifex.**"/>
 
 		<include name="media/com_ctransifex/**"/>
+		<exclude name="media/com_ctransifex/packages/**"/>
 	</fileset>
 
 	<filterchain id="standard-tokens-core">
@@ -103,9 +99,12 @@
 		<!-- Core version -->
 		<copy todir="${destination.dir}/core">
 			<fileset refid="component-core"/>
-			<fileset refid="component-core-only"/>
 			<fileset refid="component-install"/>
 		</copy>
+
+		<!-- create the packages folder -->
+		<mkdir dir="${destination.dir}/core/media/com_${component.name}/packages"/>
+		<touch file="${destination.dir}/core/media/com_${component.name}/packages/index.html" />
 
 		<!-- Copy the CHANGELOG -->
 		<copy file="${dirs.root}/CHANGELOG" tofile="${destination.dir}/core/administrator/components/com_${component.name}/CHANGELOG.php" overwrite="true">
@@ -139,8 +138,12 @@
 			<fileset refid="component-install"/>
 		</copy>
 
+		<!-- create the packages folder -->
+		<mkdir dir="${destination.dir}/pro/media/com_${component.name}/packages"/>
+		<touch file="${destination.dir}/pro/media/com_${component.name}/packages/index.html" />
+
 		<!-- Copy the CHANGELOG -->
-		<copy file="${dirs.root}/CHANGELOG" tofile="${destination.dir}/core/administrator/components/com_${component.name}/CHANGELOG.php" overwrite="true">
+		<copy file="${dirs.root}/CHANGELOG" tofile="${destination.dir}/pro/administrator/components/com_${component.name}/CHANGELOG.php" overwrite="true">
 		</copy>
 
 		<copy file="./templates/version.php"

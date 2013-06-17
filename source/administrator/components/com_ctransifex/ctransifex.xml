@@ -17,7 +17,7 @@
 			<file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
 		</sql>
 	</install>
-	<files folder="components/com_@@COMPONENTNAME@@">
+	<files folder="components/com_ctransifex">
 		##FRONTENDCOMPONENTPACKAGEFILES##
 	</files>
 	<languages folder="language">
@@ -29,7 +29,7 @@
 			<menu view="projects">COM_CTRANSIFEX_PROJECTS</menu>
 			<menu view="liveupdate">COM_CTRANSIFEX_LIVEUPDATE</menu>
 		</submenu>
-		<files folder="administrator/components/com_@@COMPONENTNAME@@">
+		<files folder="administrator/components/com_ctransifex">
 			##ADMINCOMPONENTPACKAGEFILES##
 		</files>
 		<languages folder="administrator/language">
