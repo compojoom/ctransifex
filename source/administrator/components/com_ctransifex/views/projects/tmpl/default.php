@@ -122,7 +122,7 @@ $document->addScriptDeclaration($domready);
 	<div>
 		<div class="fluid-row">
 			<strong>
-				CTransifex
+				CTransifex <?php echo (CTRANSIFEX_PRO) ? 'PRO' : 'Core'; ?>
 				<?php echo JComponentHelper::getParams('com_ctransifex')->get('version'); ?></strong>
 			<br>
 	<span style="font-size: x-small">
