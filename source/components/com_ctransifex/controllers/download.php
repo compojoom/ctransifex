@@ -28,7 +28,7 @@ class CtransifexControllerDownload extends JControllerLegacy
 	public function download()
 	{
 		$input = JFactory::getApplication()->input;
-		$language = $input->getInt('language', 0);
+		$language = $input->getInt('ctlanguage', 0);
 
 		$db = JFactory::getDbo();
 

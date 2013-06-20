@@ -66,7 +66,7 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 <div class="row-fluid">
 	<div class="form-actions">
 		<?php if($language->completed) : ?>
-		<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=download.download&language=' . $language->id); ?>">
+		<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_ctransifex&task=download.download&ctlanguage=' . $language->id); ?>">
 			<?php echo JText::_('COM_CTRANSIFEX_DOWNLOAD_NOW'); ?>
 		</a>
 		<?php else: ?>
