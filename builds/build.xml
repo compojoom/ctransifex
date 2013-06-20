@@ -191,19 +191,38 @@
 		<gitversion workingCopy="${dirs.root}" propertyName="git.lastrevision"/>
 		<!-- Core release -->
 		<echo>Uploading CTransifex nightly build</echo>
+		<echo>Uploading Core release</echo>
+		<echo message="aaaaaaaaaaaaaaaaa ${destination.dir}" />
 		<ftpdeploy
 				host="${ftp.host}"
 				port="${ftp.port}"
 				username="${ftp.username}"
 				password="${ftp.password}"
-				dir="${ftp.dir}/${component.name}/git${git.lastrevision}"
+				dir="${ftp.dir}/ctransifex/core/git${git.lastrevision}"
 				mode="${ftp.mode}"
 				level="debug">
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>
 			</fileset>
-			<fileset dir="${destination.dir}/../">
-				<include name="com_${component.name}-git_${git.lastrevision}.zip"/>
+			<fileset dir="${destination.dir}/">
+				<include name="com_${component.name}-git_${git.lastrevision}-core.zip"/>
+			</fileset>
+		</ftpdeploy>
+		<!-- Professional release -->
+		<echo>Uploading Professional release</echo>
+		<ftpdeploy
+				host="${ftp.host}"
+				port="${ftp.port}"
+				username="${ftp.username}"
+				password="${ftp.password}"
+				dir="${ftp.dir}/ctransifex/pro/git${git.lastrevision}"
+				mode="${ftp.mode}"
+				level="debug">
+			<fileset dir="${dirs.root}">
+				<include name="CHANGELOG"/>
+			</fileset>
+			<fileset dir="${destination.dir}/">
+				<include name="com_${component.name}-git_${git.lastrevision}-pro.zip"/>
 			</fileset>
 		</ftpdeploy>
 	</target>
