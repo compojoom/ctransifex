@@ -1,5 +1,6 @@
 <?php die();?>
 
+# FE needs to show only published projects...
 # when the language filter was turned on we weren't able to download the languages
 + added an option to hide the languages that are at 0%
 + contribute now link on the resource leads directly to the editor in transifex.com
