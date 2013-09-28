@@ -238,6 +238,7 @@ class CtransifexHelperLanguage
 		'nb' => 'norwegian',
 		'ne' => 'nepali',
 		'nl' => 'dutch',
+		'nn' => 'norwegian (Nynorsk)',
 		'no' => 'norwegian',
 		'pl' => 'polish',
 		'ps' => 'pashto',
