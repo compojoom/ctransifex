@@ -62,9 +62,19 @@ class CtransifexModelPackage extends JModelLegacy
 			}
 		}
 
+		// Prevent division by zero
+		if (empty($totalStrings))
+		{
+			$completed = 0;
+		}
+		else
+		{
+			$completed = (int) (($translatedStrings / $totalStrings) * 100);
+		}
+
 		$values = $db->q($this->projectId) .
 			',' . $db->q($language) .
-			',' . $db->q((int) (($translatedStrings / $totalStrings) * 100)) .
+			',' . $db->q($completed) .
 			',' . $db->q(JFactory::getDate()->toSql());
 
 		$query->insert('#__ctransifex_zips')
