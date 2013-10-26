@@ -55,9 +55,15 @@ class CtransifexControllerTransifex extends JControllerLegacy
 		{
 			$resources = json_decode($resources['data']);
 
+			// Calculate the response data
 			foreach ($resources as $resource)
 			{
-				$response['data'][] = $resource->slug;
+				// Only add the resource to the response data if it's defined in the Transifex config
+				$config = parse_ini_string($project->transifex_config, true);
+				if (isset($config[$project->transifex_slug . '.' . $resource->name]))
+				{
+					$response['data'][] = $resource->slug;
+				}
 			}
 
 			// If we have resources add them to the db
