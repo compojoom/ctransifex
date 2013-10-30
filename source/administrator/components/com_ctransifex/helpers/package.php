@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+jimport('joomla.filesystem.file');
+
 /**
  * Class ctransifexHelperPackage
  *
