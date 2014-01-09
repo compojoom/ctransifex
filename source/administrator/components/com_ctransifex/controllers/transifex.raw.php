@@ -159,7 +159,7 @@ class CtransifexControllerTransifex extends JControllerLegacy
 				}
 
 				// Download the file only if necessary
-				if ($minPerc == 0 || $minPerc < $langInfo->completed)
+				if ($minPerc == 0 || $minPerc <= $langInfo->completed)
 				{
 					if (!$this->langFile($resource->resource_name, $lang, $model))
 					{

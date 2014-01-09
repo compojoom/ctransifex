@@ -21,7 +21,7 @@ class CtransifexModelPackage extends JModelLegacy
 	/**
 	 * Constructor
 	 *
-	 * @param   array  $config  - An array of configuration options (name, state, dbo, table_path, ignore_request).
+	 * @param   array $config - An array of configuration options (name, state, dbo, table_path, ignore_request).
 	 */
 	public function __construct(array $config = array())
 	{
@@ -37,8 +37,8 @@ class CtransifexModelPackage extends JModelLegacy
 	/**
 	 * Ads the lang pack to the DB
 	 *
-	 * @param   string  $language       - the joomla lang
-	 * @param   string  $transifexLang  - the transifexLang
+	 * @param   string $language      - the joomla lang
+	 * @param   string $transifexLang - the transifexLang
 	 *
 	 * @return void
 	 */
@@ -72,20 +72,39 @@ class CtransifexModelPackage extends JModelLegacy
 			$completed = (int) (($translatedStrings / $totalStrings) * 100);
 		}
 
-		$values = $db->q($this->projectId) .
-			',' . $db->q($language) .
-			',' . $db->q($completed) .
-			',' . $db->q(JFactory::getDate()->toSql());
+		$query->select('*')->from('#__ctransifex_zips')
+			->where('lang_name=' . $db->q($language))
+			->where('project_id=' . $db->q($this->projectId));
 
-		$query->insert('#__ctransifex_zips')
-			->columns(
-				array(
-					$db->qn('project_id'),
-					$db->qn('lang_name'),
-					$db->qn('completed'),
-					$db->qn('created')
-				)
-			)->values($values);
+		$db->setQuery($query);
+
+		if ($db->loadObject())
+		{
+			$query->clear();
+
+			$query->update('#__ctransifex_zips')->set('completed=' . $db->q($completed))
+				->set('created=' . $db->q(JFactory::getDate()->toSql()))
+				->where('lang_name=' . $db->q($language))
+				->where('project_id=' . $db->q($this->projectId));
+		}
+		else
+		{
+			$values = $db->q($this->projectId) .
+				',' . $db->q($language) .
+				',' . $db->q($completed) .
+				',' . $db->q(JFactory::getDate()->toSql());
+
+			$query->insert('#__ctransifex_zips')
+				->columns(
+					array(
+						$db->qn('project_id'),
+						$db->qn('lang_name'),
+						$db->qn('completed'),
+						$db->qn('created')
+					)
+				)->values($values);
+		}
+
 
 		$db->setQuery($query);
 		$db->execute();

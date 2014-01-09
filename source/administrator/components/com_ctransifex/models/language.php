@@ -21,7 +21,7 @@ class ctransifexModelLanguage extends JModelLegacy
 	/**
 	 * Constructor
 	 *
-	 * @param   array  $config  - array with config options
+	 * @param   array $config - array with config options
 	 */
 	public function __construct(array $config = array())
 	{
@@ -42,50 +42,82 @@ class ctransifexModelLanguage extends JModelLegacy
 	/**
 	 * Add languages to DB
 	 *
-	 * @param   array  $languages  - the languages info
+	 * @param   array $languages - the languages info
 	 *
 	 * @return void
 	 */
-	public function add($languages = array())
+	public function add($languages = array(), $update = false)
 	{
 		// Now add the resources
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
+		$values = array();
+
 		$config = parse_ini_string($this->project->transifex_config, true);
 
-		foreach ($languages as $key => $language)
+		if (!$update)
 		{
-			$langCode = ctransifexHelperTransifex::getLangCode($key, $config);
-
-			if ($langCode)
+			foreach ($languages as $key => $language)
 			{
-				$values[] = $db->q($this->projectId) . ','
-					. $db->q($this->resourceId) . ','
-					. $db->q($langCode) . ','
-					. $db->q($language->completed) . ','
-					. $db->q(json_encode($language));
+				$langCode = ctransifexHelperTransifex::getLangCode($key, $config);
+
+				if ($langCode)
+				{
+					$values[] = $db->q($this->projectId) . ','
+						. $db->q($this->resourceId) . ','
+						. $db->q($langCode) . ','
+						. $db->q($language->completed) . ','
+						. $db->q(json_encode($language));
+				}
+			}
+
+			if (count($values))
+			{
+				$query->insert('#__ctransifex_languages')
+					->columns(
+						array(
+							$db->qn('project_id'),
+							$db->qn('resource_id'),
+							$db->qn('lang_name'),
+							$db->qn('completed'),
+							$db->qn('raw_data')
+						)
+					)->values($values);
+
+
+				$db->setQuery($query);
+				$db->execute();
+			}
+		}
+		else
+		{
+			foreach ($languages as $key => $language)
+			{
+				$langCode = ctransifexHelperTransifex::getLangCode($key, $config);
+
+				if ($langCode)
+				{
+					$query->clear();
+
+					$query->update('#__ctransifex_languages')
+						->set('completed=' . $db->q($language->completed))
+						->set('raw_data=' . $db->q(json_encode($language)))
+						->where('project_id =' . $db->q($this->projectId))
+						->where('resource_id =' . $db->q($this->resourceId))
+						->where('lang_name =' . $db->q($langCode));
+
+					$db->setQuery($query);
+					$db->execute();
+				}
 			}
 		}
 
-		$query->insert('#__ctransifex_languages')
-			->columns(
-				array(
-					$db->qn('project_id'),
-					$db->qn('resource_id'),
-					$db->qn('lang_name'),
-					$db->qn('completed'),
-					$db->qn('raw_data')
-				)
-			)->values($values);
-
-		$db->setQuery($query);
-		$db->execute();
 	}
 
 	/**
 	 * Gets resource information
 	 *
-	 * @param   string  $name  - the resource name
+	 * @param   string $name - the resource name
 	 *
 	 * @return mixed
 	 */
@@ -104,7 +136,7 @@ class ctransifexModelLanguage extends JModelLegacy
 	/**
 	 * Gets all resources for the language
 	 *
-	 * @param   string  $jlang  - the joomla lang
+	 * @param   string $jlang - the joomla lang
 	 *
 	 * @return mixed
 	 */
@@ -135,8 +167,8 @@ class ctransifexModelLanguage extends JModelLegacy
 	/**
 	 * Gets language info for a resource
 	 *
-	 * @param   string  $jLang         - the joomla lang
-	 * @param   string  $resourceName  - the resource name
+	 * @param   string $jLang        - the joomla lang
+	 * @param   string $resourceName - the resource name
 	 *
 	 * @return mixed
 	 */
