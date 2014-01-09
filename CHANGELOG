@@ -1,5 +1,6 @@
 <?php die();?>
 
+# wrong link for Help improve this lang pack
 + adding nn to the code2name array (norwegian (Nynorsk))
 # FE needs to show only published projects...
 # when the language filter was turned on we weren't able to download the languages

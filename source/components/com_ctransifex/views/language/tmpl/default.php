@@ -75,7 +75,7 @@ $langCountry = ctransifexHelperLanguage::code2ToCountry($langParts[1]);
 			</div>
 		<?php endif; ?>
 		<?php if ($this->project->params['display_contribute_link']) : ?>
-			<a href="http://transifex.com/projects/p/<?php echo $this->project->transifex_slug; ?>/language/<?php echo $language->lang_name; ?>"
+			<a href="http://transifex.com/projects/p/<?php echo $this->project->transifex_slug; ?>/language/<?php echo CtransifexHelperTransifex::getLangCode($language->lang_name, $this->project->transifex_config, true); ?>"
 			   class="btn" target="_blank">
 				<?php echo JText::_('COM_CTRANSIFEX_HELP_IMPROVE_THIS_LANGUAGE_PACK'); ?>
 			</a>
