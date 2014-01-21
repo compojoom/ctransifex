@@ -71,7 +71,7 @@ class CtransifexCli extends JApplicationCli
 			$resources = $this->handleResources($project);
 
 			// If something goes wrong with the resources show the error and exit
-			if (!$resources)
+			if (!is_array($resources))
 			{
 				print $this->error;
 

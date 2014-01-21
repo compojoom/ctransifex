@@ -54,6 +54,8 @@
 		<include name="administrator/components/com_ctransifex/**"/>
 		<include name="administrator/language/*/*.com_ctransifex.**"/>
 
+		<include name="cli/ctransifex.php"/>
+
 		<include name="components/com_ctransifex/**"/>
 		<include name="language/*/*.com_ctransifex.**"/>
 
@@ -70,6 +72,8 @@
 	<fileset dir="${dirs.source}" id="component-pro">
 		<include name="administrator/components/com_ctransifex/**"/>
 		<include name="administrator/language/*/*.com_ctransifex.**"/>
+
+		<include name="cli/ctransifex.php"/>
 
 		<include name="components/com_ctransifex/**"/>
 		<include name="language/*/*.com_ctransifex.**"/>
